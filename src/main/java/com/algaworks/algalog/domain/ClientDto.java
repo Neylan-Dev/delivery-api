@@ -19,7 +19,7 @@ public class ClientDto {
     private String name;
 
     @NotBlank(message = "O email não pode ser nulo")
-    @Email(message = "Email='${validatedValue}' inválido")
+    @Email(message = "O email='${validatedValue}' é inválido")
     private String email;
 
     @NotBlank(message = "O telefone não pode ser nulo")

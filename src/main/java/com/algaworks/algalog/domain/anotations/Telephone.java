@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Telephone {
 
-    String message() default "Telefone inválido";
+    String message() default "O telefone='${validatedValue}' é inválido";
     Class[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 

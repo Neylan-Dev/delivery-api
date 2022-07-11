@@ -5,6 +5,7 @@ import com.algaworks.algalog.domain.model.Client;
 import com.algaworks.algalog.domain.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,27 +31,28 @@ public class ClientController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    public List<Client> listAll() {
-        return clientRepository.findAll();
+    public List<ClientDto> listAll() {
+        return modelMapper.map(clientRepository.findAll(), new TypeToken<List<ClientDto>>() {
+        }.getType());
     }
 
     @GetMapping("/{clientId}")
-    public ResponseEntity<Client> findById(@PathVariable Long clientId) {
-        return clientRepository.findById(clientId).map(ResponseEntity::ok)
+    public ResponseEntity<ClientDto> findById(@PathVariable Long clientId) {
+        return clientRepository.findById(clientId).map(client -> ResponseEntity.ok(modelMapper.map(client, ClientDto.class)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Client create(@RequestBody @Valid ClientDto clientDto) {
-        return clientRepository.save(modelMapper.map(clientDto, Client.class));
+    public ClientDto create(@RequestBody @Valid ClientDto clientDto) {
+        return modelMapper.map(clientRepository.save(modelMapper.map(clientDto, Client.class)), ClientDto.class);
     }
 
     @PutMapping
-    public ResponseEntity<Client> update(@PathVariable Long clientId, @RequestBody ClientDto clientDto) {
+    public ResponseEntity<ClientDto> update(@PathVariable Long clientId, @RequestBody @Valid ClientDto clientDto) {
         if (clientRepository.existsById(clientId)) {
             clientDto.setId(clientId);
-            return ResponseEntity.ok().body(clientRepository.save(modelMapper.map(clientDto, Client.class)));
+            return ResponseEntity.ok().body(modelMapper.map(clientRepository.save(modelMapper.map(clientDto, Client.class)), ClientDto.class));
         }
         return ResponseEntity.notFound().build();
     }
