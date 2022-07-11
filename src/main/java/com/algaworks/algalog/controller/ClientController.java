@@ -5,6 +5,7 @@ import com.algaworks.algalog.domain.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,18 +37,24 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Client save(@RequestBody Client client) {
+    public Client create(@RequestBody Client client) {
         return clientRepository.save(client);
     }
 
     @PutMapping
     public ResponseEntity<Client> update(@PathVariable Long clientId, @RequestBody Client client) {
-        var optionalClient = clientRepository.findById(clientId);
-        if (optionalClient.isPresent()){
-            var client1 = optionalClient.get();
-            client1.setTelephone(client.getTelephone());
-            client1.setEmail(client.getEmail());
-            return ResponseEntity.ok().body(clientRepository.save(client1));
+        if (clientRepository.existsById(clientId)) {
+            client.setId(clientId);
+            return ResponseEntity.ok().body(clientRepository.save(client));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@PathVariable Long clientId) {
+        if (clientRepository.existsById(clientId)) {
+            clientRepository.deleteById(clientId);
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
