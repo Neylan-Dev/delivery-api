@@ -1,8 +1,10 @@
 package com.algaworks.algalog.controller;
 
+import com.algaworks.algalog.domain.ClientDto;
 import com.algaworks.algalog.domain.model.Client;
 import com.algaworks.algalog.domain.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,6 +26,8 @@ import java.util.List;
 public class ClientController {
 
     private final ClientRepository clientRepository;
+
+    private final ModelMapper modelMapper;
 
     @GetMapping
     public List<Client> listAll() {
@@ -37,15 +42,15 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Client create(@RequestBody Client client) {
-        return clientRepository.save(client);
+    public Client create(@RequestBody @Valid ClientDto clientDto) {
+        return clientRepository.save(modelMapper.map(clientDto, Client.class));
     }
 
     @PutMapping
-    public ResponseEntity<Client> update(@PathVariable Long clientId, @RequestBody Client client) {
+    public ResponseEntity<Client> update(@PathVariable Long clientId, @RequestBody ClientDto clientDto) {
         if (clientRepository.existsById(clientId)) {
-            client.setId(clientId);
-            return ResponseEntity.ok().body(clientRepository.save(client));
+            clientDto.setId(clientId);
+            return ResponseEntity.ok().body(clientRepository.save(modelMapper.map(clientDto, Client.class)));
         }
         return ResponseEntity.notFound().build();
     }
