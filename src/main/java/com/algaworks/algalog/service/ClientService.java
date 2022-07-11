@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -36,7 +33,7 @@ public class ClientService {
         return modelMapper.map(clientRepository.save(modelMapper.map(clientDto, Client.class)), ClientDto.class);
     }
 
-    public ClientDto update(@PathVariable Long clientId, @RequestBody @Valid ClientDto clientDto) {
+    public ClientDto update(Long clientId, ClientDto clientDto) {
         if (clientRepository.existsById(clientId)) {
             clientDto.setId(clientId);
             return modelMapper.map(clientRepository.save(modelMapper.map(clientDto, Client.class)), ClientDto.class);
@@ -44,7 +41,7 @@ public class ClientService {
         throw DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId));
     }
 
-    public void delete(@PathVariable Long clientId) {
+    public void delete(Long clientId) {
         if (clientRepository.existsById(clientId)) {
             clientRepository.deleteById(clientId);
         } else {
