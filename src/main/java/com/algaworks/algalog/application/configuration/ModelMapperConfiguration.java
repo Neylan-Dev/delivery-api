@@ -1,4 +1,4 @@
-package com.algaworks.algalog.configuration;
+package com.algaworks.algalog.application.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

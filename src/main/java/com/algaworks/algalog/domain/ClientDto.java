@@ -20,6 +20,7 @@ public class ClientDto {
 
     @NotBlank(message = "O email não pode ser nulo")
     @Email(message = "O email='${validatedValue}' é inválido")
+    @Size(max = 255, message = "O tamanho de email não pode exceder {max} caracteres")
     private String email;
 
     @NotBlank(message = "O telefone não pode ser nulo")
