@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.algaworks.algalog.domain.utils.ParseObjects.*;
 
@@ -29,6 +30,7 @@ public class ClientService {
 
     @Transactional
     public ClientDto create(ClientDto clientDto) {
+        validate(clientDto);
         return clientToClientDto(clientRepository.save(clientDtoToClient(clientDto)));
     }
 
@@ -37,6 +39,7 @@ public class ClientService {
     public ClientDto update(Long clientId, ClientDto clientDto) {
         if (clientRepository.existsById(clientId)) {
             clientDto.setId(clientId);
+            validate(clientDto);
             return clientToClientDto(clientRepository.save(clientDtoToClient(clientDto)));
         }
         throw DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId));
@@ -51,5 +54,25 @@ public class ClientService {
         }
     }
 
+    private void validate(ClientDto clientDto){
+        validateEmail(clientDto);
+        validateTelephone(clientDto);
+    }
+
+    private void validateTelephone(ClientDto clientDto){
+        clientRepository.findByTelephone(clientDto.getTelephone()).ifPresent(client -> {
+            if(Objects.isNull(clientDto.getId()) || !clientDto.getId().equals(client.getId())){
+                throw DataForBusinessException.TELEPHONE_EXISTS.asBusinessExceptionWithDescriptionFormatted(clientDto.getTelephone());
+            }
+        });
+    }
+
+    private void validateEmail(ClientDto clientDto){
+        clientRepository.findByEmail(clientDto.getEmail()).ifPresent(client -> {
+            if(Objects.isNull(clientDto.getId()) || !clientDto.getId().equals(client.getId())){
+                throw DataForBusinessException.EMAIL_EXISTS.asBusinessExceptionWithDescriptionFormatted(clientDto.getEmail());
+            }
+        });
+    }
 
 }
