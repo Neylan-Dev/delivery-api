@@ -1,15 +1,16 @@
-package com.algaworks.algalog.service;
+package com.algaworks.algalog.domain.service;
 
 import com.algaworks.algalog.domain.ClientDto;
 import com.algaworks.algalog.domain.enums.DataForBusinessException;
-import com.algaworks.algalog.domain.model.Client;
 import com.algaworks.algalog.domain.repository.ClientRepository;
+import com.algaworks.algalog.domain.utils.ParseObjects;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.algaworks.algalog.domain.utils.ParseObjects.*;
 
 @Service
 @RequiredArgsConstructor
@@ -17,26 +18,26 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
 
-    private final ModelMapper modelMapper;
-
     public List<ClientDto> findAll() {
-        return modelMapper.map(clientRepository.findAll(), new TypeToken<List<ClientDto>>() {
-        }.getType());
+        return listClientToListClientDto(clientRepository.findAll());
     }
 
     public ClientDto findById(Long clientId) {
-        return clientRepository.findById(clientId).map(client -> modelMapper.map(client, ClientDto.class))
+        return clientRepository.findById(clientId).map(ParseObjects::clientToClientDto)
                 .orElseThrow(() -> DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId)));
     }
 
+    @Transactional
     public ClientDto create(ClientDto clientDto) {
-        return modelMapper.map(clientRepository.save(modelMapper.map(clientDto, Client.class)), ClientDto.class);
+        return clientToClientDto(clientRepository.save(clientDtoToClient(clientDto)));
     }
 
+
+    @Transactional
     public ClientDto update(Long clientId, ClientDto clientDto) {
         if (clientRepository.existsById(clientId)) {
             clientDto.setId(clientId);
-            return modelMapper.map(clientRepository.save(modelMapper.map(clientDto, Client.class)), ClientDto.class);
+            return clientToClientDto(clientRepository.save(clientDtoToClient(clientDto)));
         }
         throw DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId));
     }
@@ -48,5 +49,6 @@ public class ClientService {
             throw DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId));
         }
     }
+
 
 }
