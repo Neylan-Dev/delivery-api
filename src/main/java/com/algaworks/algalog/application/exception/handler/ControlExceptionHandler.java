@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,29 @@ public class ControlExceptionHandler {
 
         var businessException = DataForBusinessException.INVALID_INPUT
                 .asBusinessExceptionWithDescription(fieldErrorDtos.toString());
+
+        return ResponseEntity.status(businessException.getHttpStatusCode()).body(businessException.getOnlyBody());
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    private ResponseEntity<Object> handleDataSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
+
+        var constraintViolations = ex.getLocalizedMessage();
+        var split = constraintViolations.split("'");
+
+        var value = split[1];
+
+        BusinessException businessException;
+
+        if (split[3].contains("email")) {
+            businessException = DataForBusinessException.EMAIL_EXISTS
+                    .asBusinessExceptionWithDescriptionFormatted(value);
+        }else if (split[3].contains("telephone")){
+            businessException = DataForBusinessException.TELEPHONE_EXISTS
+                    .asBusinessExceptionWithDescriptionFormatted(value);
+        }else {
+            businessException = DataForBusinessException.ILLEGAL_ARGUMENT_EXCEPTION.asBusinessException();
+        }
 
         return ResponseEntity.status(businessException.getHttpStatusCode()).body(businessException.getOnlyBody());
     }
