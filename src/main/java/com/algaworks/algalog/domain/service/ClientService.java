@@ -42,6 +42,7 @@ public class ClientService {
         throw DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId));
     }
 
+    @Transactional
     public void delete(Long clientId) {
         if (clientRepository.existsById(clientId)) {
             clientRepository.deleteById(clientId);
