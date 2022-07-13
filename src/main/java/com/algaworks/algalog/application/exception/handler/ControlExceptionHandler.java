@@ -38,7 +38,7 @@ public class ControlExceptionHandler {
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    private ResponseEntity<Object> handleDataSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
+    private ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
 
         var constraintViolations = ex.getLocalizedMessage();
         var split = constraintViolations.split("'");
