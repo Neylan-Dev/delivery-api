@@ -1,6 +1,7 @@
 package com.algaworks.algalog.domain.service;
 
-import com.algaworks.algalog.domain.ClientDto;
+import com.algaworks.algalog.domain.dto.ClientRequestDto;
+import com.algaworks.algalog.domain.dto.ClientResponseDto;
 import com.algaworks.algalog.domain.enums.DataForBusinessException;
 import com.algaworks.algalog.domain.repository.ClientRepository;
 import com.algaworks.algalog.domain.utils.ParseObjects;
@@ -10,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.algaworks.algalog.domain.utils.ParseObjects.clientDtoToClient;
-import static com.algaworks.algalog.domain.utils.ParseObjects.clientToClientDto;
-import static com.algaworks.algalog.domain.utils.ParseObjects.listClientToListClientDto;
+import static com.algaworks.algalog.domain.utils.ParseObjects.clientRequestDtoToClient;
+import static com.algaworks.algalog.domain.utils.ParseObjects.clientToClientResponseDto;
+import static com.algaworks.algalog.domain.utils.ParseObjects.listClientToListClientResponseDto;
 
 @Service
 @RequiredArgsConstructor
@@ -20,26 +21,27 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
 
-    public List<ClientDto> findAll() {
-        return listClientToListClientDto(clientRepository.findAll());
+    public List<ClientResponseDto> findAll() {
+        return listClientToListClientResponseDto(clientRepository.findAll());
     }
 
-    public ClientDto findById(Long clientId) {
-        return clientRepository.findById(clientId).map(ParseObjects::clientToClientDto)
+    public ClientResponseDto findById(Long clientId) {
+        return clientRepository.findById(clientId).map(ParseObjects::clientToClientResponseDto)
                 .orElseThrow(() -> DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId)));
     }
 
     @Transactional
-    public ClientDto create(ClientDto clientDto) {
-        return clientToClientDto(clientRepository.save(clientDtoToClient(clientDto)));
+    public ClientResponseDto create(ClientRequestDto clientRequestDto) {
+        return clientToClientResponseDto(clientRepository.save(clientRequestDtoToClient(clientRequestDto)));
     }
 
 
     @Transactional
-    public ClientDto update(Long clientId, ClientDto clientDto) {
+    public ClientResponseDto update(Long clientId, ClientRequestDto clientRequestDto) {
         if (clientRepository.existsById(clientId)) {
-            clientDto.setId(clientId);
-            return clientToClientDto(clientRepository.save(clientDtoToClient(clientDto)));
+            var client = clientRequestDtoToClient(clientRequestDto);
+            client.setId(clientId);
+            return clientToClientResponseDto(clientRepository.save(client));
         }
         throw DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId));
     }

@@ -1,46 +1,44 @@
 package com.algaworks.algalog.domain.utils;
 
-import com.algaworks.algalog.domain.ClientDto;
-import com.algaworks.algalog.domain.DeliveryDto;
+import com.algaworks.algalog.domain.dto.ClientRequestDto;
+import com.algaworks.algalog.domain.dto.ClientResponseDto;
+import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
+import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
 import com.algaworks.algalog.domain.model.Client;
 import com.algaworks.algalog.domain.model.Delivery;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParseObjects {
 
     private static final ModelMapper modelMapper = new ModelMapper();
 
-    public static ClientDto clientToClientDto(Client client) {
-        return modelMapper.map(client, ClientDto.class);
+    public static ClientResponseDto clientToClientResponseDto(Client client) {
+        return modelMapper.map(client, ClientResponseDto.class);
     }
 
-    public static Client clientDtoToClient(ClientDto clientDto) {
-        return modelMapper.map(clientDto, Client.class);
+    public static Client clientRequestDtoToClient(ClientRequestDto clientRequestDto) {
+        return modelMapper.map(clientRequestDto, Client.class);
     }
 
-    public static List<ClientDto> listClientToListClientDto(List<Client> clients) {
-        var listClientDto = new ArrayList<ClientDto>();
-        clients.forEach(client -> listClientDto.add(clientToClientDto(client)));
-        return listClientDto;
+    public static List<ClientResponseDto> listClientToListClientResponseDto(List<Client> clients) {
+        return clients.stream().map(ParseObjects::clientToClientResponseDto).collect(Collectors.toList());
     }
 
-    public static DeliveryDto deliveryToDeliveryDto(Delivery delivery) {
-        return modelMapper.map(delivery, DeliveryDto.class);
+    public static DeliveryResponseDto deliveryToDeliveryResponseDto(Delivery delivery) {
+        return modelMapper.map(delivery, DeliveryResponseDto.class);
     }
 
-    public static Delivery deliveryDtoToDelivery(DeliveryDto deliveryDto) {
-        return modelMapper.map(deliveryDto, Delivery.class);
+    public static Delivery deliveryRequestDtoToDelivery(DeliveryRequestDto deliveryRequestDto) {
+        return modelMapper.map(deliveryRequestDto, Delivery.class);
     }
 
-    public static List<DeliveryDto> listDeliveryToListDeliveryDto(List<Delivery> deliveries) {
-        var listDeliveryDto = new ArrayList<DeliveryDto>();
-        deliveries.forEach(delivery -> listDeliveryDto.add(deliveryToDeliveryDto(delivery)));
-        return listDeliveryDto;
+    public static List<DeliveryResponseDto> listDeliveryToListDeliveryResponseDto(List<Delivery> deliveries) {
+        return deliveries.stream().map(ParseObjects::deliveryToDeliveryResponseDto).collect(Collectors.toList());
     }
 }

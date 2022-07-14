@@ -1,6 +1,7 @@
 package com.algaworks.algalog.domain.service;
 
-import com.algaworks.algalog.domain.DeliveryDto;
+import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
+import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
 import com.algaworks.algalog.domain.enums.DataForBusinessException;
 import com.algaworks.algalog.domain.enums.DeliveryStatus;
 import com.algaworks.algalog.domain.model.Client;
@@ -14,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static com.algaworks.algalog.domain.utils.ParseObjects.deliveryDtoToDelivery;
-import static com.algaworks.algalog.domain.utils.ParseObjects.deliveryToDeliveryDto;
-import static com.algaworks.algalog.domain.utils.ParseObjects.listDeliveryToListDeliveryDto;
+import static com.algaworks.algalog.domain.utils.ParseObjects.deliveryRequestDtoToDelivery;
+import static com.algaworks.algalog.domain.utils.ParseObjects.deliveryToDeliveryResponseDto;
+import static com.algaworks.algalog.domain.utils.ParseObjects.listDeliveryToListDeliveryResponseDto;
 
 @Service
 @RequiredArgsConstructor
@@ -26,27 +27,27 @@ public class DeliveryCreationService {
     private final ClientRepository clientRepository;
 
     @Transactional
-    public DeliveryDto save(DeliveryDto deliveryDto) {
-        deliveryDto.setDeliveryStatus(DeliveryStatus.PENDING);
-        deliveryDto.setOrderedDate(OffsetDateTime.now());
-        Client client = findClientById(deliveryDto);
-        var delivery = deliveryDtoToDelivery(deliveryDto);
+    public DeliveryResponseDto save(DeliveryRequestDto deliveryRequestDto) {
+        Client client = findClientById(deliveryRequestDto);
+        var delivery = deliveryRequestDtoToDelivery(deliveryRequestDto);
+        delivery.setDeliveryStatus(DeliveryStatus.PENDING);
+        delivery.setOrderedDate(OffsetDateTime.now());
         delivery.setClient(client);
-        return deliveryToDeliveryDto(deliveryRepository.save(delivery));
+        return deliveryToDeliveryResponseDto(deliveryRepository.save(delivery));
     }
 
-    private Client findClientById(DeliveryDto deliveryDto) {
+    private Client findClientById(DeliveryRequestDto deliveryDto) {
         return clientRepository.findById(deliveryDto.getClientId())
                 .orElseThrow(() -> DataForBusinessException.CLIENT_DELIVERY_NOT_FOUND
                         .asBusinessExceptionWithDescriptionFormatted(Long.toString(deliveryDto.getClientId())));
     }
 
-    public List<DeliveryDto> findAll() {
-        return listDeliveryToListDeliveryDto(deliveryRepository.findAll());
+    public List<DeliveryResponseDto> findAll() {
+        return listDeliveryToListDeliveryResponseDto(deliveryRepository.findAll());
     }
 
-    public DeliveryDto findById(Long deliveryId) {
-        return deliveryRepository.findById(deliveryId).map(ParseObjects::deliveryToDeliveryDto)
+    public DeliveryResponseDto findById(Long deliveryId) {
+        return deliveryRepository.findById(deliveryId).map(ParseObjects::deliveryToDeliveryResponseDto)
                 .orElseThrow(() -> DataForBusinessException.DELIVERY_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(deliveryId)));
     }
 }

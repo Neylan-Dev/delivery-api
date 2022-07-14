@@ -1,4 +1,4 @@
-package com.algaworks.algalog.domain;
+package com.algaworks.algalog.domain.dto;
 
 import com.algaworks.algalog.domain.anotations.Telephone;
 import lombok.Getter;
@@ -10,9 +10,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class ClientDto {
-
-    private Long id;
+public class ClientRequestDto {
 
     @NotBlank(message = "O nome não pode ser nulo")
     @Size(max = 60, message = "O tamanho de nome não pode exceder {max} caracteres")

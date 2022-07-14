@@ -1,6 +1,7 @@
 package com.algaworks.algalog.controller;
 
-import com.algaworks.algalog.domain.DeliveryDto;
+import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
+import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
 import com.algaworks.algalog.domain.service.DeliveryCreationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,17 +24,17 @@ public class DeliveryController {
     private final DeliveryCreationService deliveryCreationService;
 
     @PostMapping
-    public ResponseEntity<DeliveryDto> create(@RequestBody @Valid DeliveryDto deliveryDto){
-        return new ResponseEntity<>(deliveryCreationService.save(deliveryDto), HttpStatus.CREATED);
+    public ResponseEntity<DeliveryResponseDto> create(@RequestBody @Valid DeliveryRequestDto deliveryRequestDto){
+        return new ResponseEntity<>(deliveryCreationService.save(deliveryRequestDto), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<DeliveryDto>> listAll() {
+    public ResponseEntity<List<DeliveryResponseDto>> listAll() {
         return ResponseEntity.ok(deliveryCreationService.findAll());
     }
 
     @GetMapping("/{deliveryId}")
-    public ResponseEntity<DeliveryDto> findById(@PathVariable Long deliveryId) {
+    public ResponseEntity<DeliveryResponseDto> findById(@PathVariable Long deliveryId) {
         return ResponseEntity.ok(deliveryCreationService.findById(deliveryId));
     }
 

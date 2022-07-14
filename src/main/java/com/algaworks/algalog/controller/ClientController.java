@@ -1,6 +1,7 @@
 package com.algaworks.algalog.controller;
 
-import com.algaworks.algalog.domain.ClientDto;
+import com.algaworks.algalog.domain.dto.ClientRequestDto;
+import com.algaworks.algalog.domain.dto.ClientResponseDto;
 import com.algaworks.algalog.domain.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,23 +26,23 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping
-    public ResponseEntity<List<ClientDto>> listAll() {
+    public ResponseEntity<List<ClientResponseDto>> listAll() {
         return ResponseEntity.ok(clientService.findAll());
     }
 
     @GetMapping("/{clientId}")
-    public ResponseEntity<ClientDto> findById(@PathVariable Long clientId) {
+    public ResponseEntity<ClientResponseDto> findById(@PathVariable Long clientId) {
         return ResponseEntity.ok(clientService.findById(clientId));
     }
 
     @PostMapping
-    public ResponseEntity<ClientDto> create(@RequestBody @Valid ClientDto clientDto) {
-        return new ResponseEntity<>(clientService.create(clientDto), HttpStatus.CREATED);
+    public ResponseEntity<ClientResponseDto> create(@RequestBody @Valid ClientRequestDto clientRequestDto) {
+        return new ResponseEntity<>(clientService.create(clientRequestDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{clientId}")
-    public ResponseEntity<ClientDto> update(@PathVariable Long clientId, @RequestBody @Valid ClientDto clientDto) {
-        return ResponseEntity.ok().body(clientService.update(clientId, clientDto));
+    public ResponseEntity<ClientResponseDto> update(@PathVariable Long clientId, @RequestBody @Valid ClientRequestDto clientRequestDto) {
+        return ResponseEntity.ok().body(clientService.update(clientId, clientRequestDto));
     }
 
     @DeleteMapping("/{clientId}")
