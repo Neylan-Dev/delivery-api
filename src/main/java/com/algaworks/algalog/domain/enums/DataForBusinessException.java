@@ -12,6 +12,8 @@ public enum DataForBusinessException {
     INVALID_INPUT("Entrada de dados inválida", null, HttpStatus.BAD_REQUEST),
     ILLEGAL_ARGUMENT_EXCEPTION("Argumento informado não é válido.", null, HttpStatus.BAD_REQUEST),
     CLIENT_NOT_FOUND("Cliente não encontrado", "clientId=%s", HttpStatus.NOT_FOUND),
+    DELIVERY_NOT_FOUND("Entrega não encontrada", "deliveryId=%s", HttpStatus.NOT_FOUND),
+    CLIENT_DELIVERY_NOT_FOUND("Cliente da entrega não encontrado", "clientId=%s", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTS("Esse email já foi cadastrado", "email=%s", HttpStatus.BAD_REQUEST),
     TELEPHONE_EXISTS("Esse telefone já foi cadastrado", "telefone=%s", HttpStatus.BAD_REQUEST);
 
