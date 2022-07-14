@@ -2,7 +2,10 @@ package com.algaworks.algalog.domain.dto;
 
 import com.algaworks.algalog.domain.enums.DeliveryStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -11,10 +14,16 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeliveryResponseDto {
 
     private Long id;
     private Long clientId;
+    private String clientName;
+    private String clientEmail;
+    private String clientTelephone;
     private String recipientName;
     private String recipientStreet;
     private String recipientNumber;

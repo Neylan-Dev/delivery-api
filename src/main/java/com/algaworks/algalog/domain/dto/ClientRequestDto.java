@@ -1,7 +1,10 @@
 package com.algaworks.algalog.domain.dto;
 
 import com.algaworks.algalog.domain.anotations.Telephone;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
@@ -10,6 +13,9 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClientRequestDto {
 
     @NotBlank(message = "O nome não pode ser nulo")
