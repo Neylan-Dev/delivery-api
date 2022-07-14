@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -33,8 +33,8 @@ public class DeliveryDto {
     @Null
     private DeliveryStatus deliveryStatus;
     @Null
-    private LocalDateTime orderedDate;
+    private OffsetDateTime orderedDate;
     @Null
-    private LocalDateTime endDate;
+    private OffsetDateTime endDate;
 
 }

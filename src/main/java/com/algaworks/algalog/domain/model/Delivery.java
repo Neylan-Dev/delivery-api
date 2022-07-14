@@ -14,7 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
@@ -33,7 +33,7 @@ public class Delivery {
     private BigDecimal tax;
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
-    private LocalDateTime orderedDate;
-    private LocalDateTime endDate;
+    private OffsetDateTime orderedDate;
+    private OffsetDateTime endDate;
 
 }

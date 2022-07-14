@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static com.algaworks.algalog.domain.utils.ParseObjects.deliveryDtoToDelivery;
@@ -28,7 +28,7 @@ public class DeliveryCreationService {
     @Transactional
     public DeliveryDto save(DeliveryDto deliveryDto) {
         deliveryDto.setDeliveryStatus(DeliveryStatus.PENDING);
-        deliveryDto.setOrderedDate(LocalDateTime.now());
+        deliveryDto.setOrderedDate(OffsetDateTime.now());
         Client client = findClientById(deliveryDto);
         var delivery = deliveryDtoToDelivery(deliveryDto);
         delivery.setClient(client);
