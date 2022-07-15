@@ -16,8 +16,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
@@ -34,6 +37,8 @@ public class Delivery {
     private Long id;
     @ManyToOne
     private Client client;
+    @OneToMany(mappedBy = "delivery")
+    private List<Occurrence> occurrences = new ArrayList<>();
     @Embedded
     private Recipient recipient;
     private BigDecimal tax;
