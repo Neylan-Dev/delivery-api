@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -37,7 +38,7 @@ public class Delivery {
     private Long id;
     @ManyToOne
     private Client client;
-    @OneToMany(mappedBy = "delivery")
+    @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
     private List<Occurrence> occurrences = new ArrayList<>();
     @Embedded
     private Recipient recipient;
@@ -47,4 +48,13 @@ public class Delivery {
     private OffsetDateTime orderedDate;
     private OffsetDateTime endDate;
 
+    public Occurrence addAndGetOccurrence(String description) {
+        var occurrence = Occurrence.builder()
+                .delivery(this)
+                .description(description)
+                .registerDate(OffsetDateTime.now())
+                .build();
+        getOccurrences().add(occurrence);
+        return occurrence;
+    }
 }

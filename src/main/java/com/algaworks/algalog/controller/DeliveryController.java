@@ -3,6 +3,7 @@ package com.algaworks.algalog.controller;
 import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
 import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
 import com.algaworks.algalog.domain.service.DeliveryCreationService;
+import com.algaworks.algalog.domain.service.OccurrenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,10 @@ import java.util.List;
 public class DeliveryController {
 
     private final DeliveryCreationService deliveryCreationService;
+    private final OccurrenceService occurrenceService;
 
     @PostMapping
-    public ResponseEntity<DeliveryResponseDto> create(@RequestBody @Valid DeliveryRequestDto deliveryRequestDto){
+    public ResponseEntity<DeliveryResponseDto> create(@RequestBody @Valid DeliveryRequestDto deliveryRequestDto) {
         return new ResponseEntity<>(deliveryCreationService.save(deliveryRequestDto), HttpStatus.CREATED);
     }
 

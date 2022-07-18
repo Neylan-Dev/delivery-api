@@ -4,8 +4,10 @@ import com.algaworks.algalog.domain.dto.ClientRequestDto;
 import com.algaworks.algalog.domain.dto.ClientResponseDto;
 import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
 import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
+import com.algaworks.algalog.domain.dto.OccurrenceResponseDto;
 import com.algaworks.algalog.domain.model.Client;
 import com.algaworks.algalog.domain.model.Delivery;
+import com.algaworks.algalog.domain.model.Occurrence;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -40,5 +42,13 @@ public class ParseObjects {
 
     public static List<DeliveryResponseDto> listDeliveryToListDeliveryResponseDto(List<Delivery> deliveries) {
         return deliveries.stream().map(ParseObjects::deliveryToDeliveryResponseDto).collect(Collectors.toList());
+    }
+
+    public static OccurrenceResponseDto occurrenceToOccurrenceResponseDto(Occurrence occurrence) {
+        return modelMapper.map(occurrence, OccurrenceResponseDto.class);
+    }
+
+    public static List<OccurrenceResponseDto> listOccurrenceToListOccurrenceResponseDto(List<Occurrence> occurrences) {
+        return occurrences.stream().map(ParseObjects::occurrenceToOccurrenceResponseDto).collect(Collectors.toList());
     }
 }
