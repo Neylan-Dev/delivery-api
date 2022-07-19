@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.model;
 
+import com.algaworks.algalog.domain.enums.DataForBusinessException;
 import com.algaworks.algalog.domain.enums.DeliveryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,5 +57,29 @@ public class Delivery {
                 .build();
         getOccurrences().add(occurrence);
         return occurrence;
+    }
+
+    public void complete(){
+        if (!canBeCompletedOrCanceled()){
+            throw DataForBusinessException.DELIVERY_CANNOT_BE_COMPLETED.asBusinessExceptionWithDescriptionFormatted(Long.toString(getId()));
+        }
+
+        setDeliveryStatus(DeliveryStatus.FINALIZED);
+        setEndDate(OffsetDateTime.now());
+    }
+
+    public void cancel(){
+        if (!canBeCompletedOrCanceled()){
+            throw DataForBusinessException.DELIVERY_CANNOT_BE_CANCELED.asBusinessExceptionWithDescriptionFormatted(Long.toString(getId()));
+        }
+
+        setDeliveryStatus(DeliveryStatus.CANCELLED);
+        setEndDate(OffsetDateTime.now());
+    }
+
+
+
+    private boolean canBeCompletedOrCanceled(){
+        return getDeliveryStatus().equals(DeliveryStatus.PENDING);
     }
 }
