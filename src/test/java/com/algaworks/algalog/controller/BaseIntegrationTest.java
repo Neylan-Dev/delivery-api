@@ -1,5 +1,6 @@
 package com.algaworks.algalog.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +25,16 @@ abstract class BaseIntegrationTest {
 
     protected MockMvc mockMvc;
 
+    @Autowired
+    protected ObjectMapper objectMapper;
+
     @BeforeAll
     public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
+                .addFilter((servletRequest, servletResponse, filterChain) -> {
+                    servletResponse.setCharacterEncoding("UTF-8");
+                    filterChain.doFilter(servletRequest, servletResponse);
+                })
+                .build();
     }
 }
