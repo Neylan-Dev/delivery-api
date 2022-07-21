@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.dto;
 
+import com.algaworks.algalog.domain.anotations.Name;
 import com.algaworks.algalog.domain.anotations.Telephone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,8 @@ import javax.validation.constraints.Size;
 public class ClientRequestDto {
 
     @NotBlank(message = "O nome não pode ser nulo")
-    @Size(max = 60, message = "O tamanho de nome não pode exceder {max} caracteres")
+    @Size(min = 3, max = 100, message = "O nome não deve ter menos que {min} ou mais que {max} caracteres")
+    @Name
     private String name;
 
     @NotBlank(message = "O email não pode ser nulo")
