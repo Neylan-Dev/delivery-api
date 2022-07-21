@@ -1,4 +1,4 @@
-package com.algaworks.integration;
+package com.algaworks.algalog.controller;
 
 import com.algaworks.algalog.domain.dto.ClientResponseDto;
 import com.algaworks.algalog.domain.service.ClientService;
