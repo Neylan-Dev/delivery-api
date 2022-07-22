@@ -4,7 +4,6 @@ import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
 import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
 import com.algaworks.algalog.domain.service.DeliveryCompletionService;
 import com.algaworks.algalog.domain.service.DeliveryCreationService;
-import com.algaworks.algalog.domain.service.OccurrenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,6 @@ import java.util.List;
 public class DeliveryController {
 
     private final DeliveryCreationService deliveryCreationService;
-    private final OccurrenceService occurrenceService;
     private final DeliveryCompletionService deliveryCompletionService;
 
     @PostMapping
