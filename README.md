@@ -5,7 +5,7 @@
 <img src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge">
 </p>
 
-<p align="center">Este projeto foi realizado durante o mergulho spring rest java da Algaworks, onde foi implementada uma API java que gerência dados de clientes e entregas.</p>
+<p align="center">Este projeto foi iniciado durante o mergulho spring rest java da Algaworks, onde foi implementada uma API java que gerência dados de clientes e entregas, segue em andamento onde novas funcionalidades estão sendo incorporadas ao projeto</p>
 <hr>
 
 # 🛠 Tecnologias
