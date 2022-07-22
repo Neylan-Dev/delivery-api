@@ -17,17 +17,17 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class DeliveryRequestDto {
 
-    @NotNull
+    @NotNull(message = "O campo clientId não pode ser nulo")
     private Long clientId;
-    @NotBlank
+    @NotBlank(message = "O campo recipientName não pode ser nulo")
     private String recipientName;
-    @NotBlank
+    @NotBlank(message = "O campo recipientStreet não pode ser nulo")
     private String recipientStreet;
-    @NotBlank
+    @NotBlank(message = "O campo recipientNumber não pode ser nulo")
     private String recipientNumber;
     private String recipientComplement;
-    @NotBlank
+    @NotBlank(message = "O campo recipientNeighborhood não pode ser nulo")
     private String recipientNeighborhood;
-    @NotNull
+    @NotNull(message = "O campo tax não pode ser nulo")
     private BigDecimal tax;
 }
