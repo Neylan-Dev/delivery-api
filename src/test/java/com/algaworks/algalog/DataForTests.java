@@ -7,9 +7,14 @@ import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
 import com.algaworks.algalog.domain.dto.OccurrenceRequestDto;
 import com.algaworks.algalog.domain.dto.OccurrenceResponseDto;
 import com.algaworks.algalog.domain.enums.DeliveryStatus;
+import com.algaworks.algalog.domain.model.Client;
+import com.algaworks.algalog.domain.model.Delivery;
+import com.algaworks.algalog.domain.model.Occurrence;
+import com.algaworks.algalog.domain.model.Recipient;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 
 public abstract class DataForTests {
 
@@ -19,6 +24,8 @@ public abstract class DataForTests {
     public final static Long VALID_DELIVERY_ID = 1L;
     public final static Long INVALID_DELIVERY_ID = 0L;
     public final static Long VALID_CLIENT_ID = 1L;
+    public final static Long VALID_OCCURRENCE_ID = 1L;
+    public final static String VALID_DESCRIPTION = "Descrição teste";
     public final static Long INVALID_CLIENT_ID = 0L;
     public final static String VALID_CLIENT_EMAIL = "teste@teste.com";
     public final static String VALID_CLIENT_NAME = "Teste dos Santos";
@@ -35,6 +42,16 @@ public abstract class DataForTests {
     public final static String INVALID_NAME_WITH_SPECIAL_CHARACTERS = "Teste2";
     public final static String INVALID_TELEPHONE = "739812132";
 
+
+    public static Client clientValid() {
+        return Client.builder()
+                .email(VALID_EMAIL)
+                .id(VALID_CLIENT_ID)
+                .telephone(VALID_TELEPHONE)
+                .name(VALID_NAME)
+                .build();
+    }
+
     public static ClientResponseDto clientResponseDtoValid() {
         return ClientResponseDto.builder()
                 .email(VALID_EMAIL)
@@ -49,6 +66,25 @@ public abstract class DataForTests {
                 .email(VALID_EMAIL)
                 .name(VALID_NAME)
                 .telephone(VALID_TELEPHONE)
+                .build();
+    }
+
+
+    public static Delivery deliveryValid() {
+        return Delivery.builder()
+                .recipient(Recipient.builder()
+                        .name(VALID_RECIPIENT_NAME)
+                        .complement(VALID_RECIPIENT_COMPLEMENT)
+                        .neighborhood(VALID_RECIPIENT_NEIGHBORHOOD)
+                        .number(VALID_RECIPIENT_NUMBER)
+                        .street(VALID_RECIPIENT_STREET)
+                        .build())
+                .deliveryStatus(DeliveryStatus.PENDING)
+                .client(clientValid())
+                .tax(new BigDecimal("1.1"))
+                .id(VALID_DELIVERY_ID)
+                .orderedDate(OffsetDateTime.now())
+                .occurrences(Collections.singletonList(occurrenceValid()))
                 .build();
     }
 
@@ -82,17 +118,27 @@ public abstract class DataForTests {
                 .build();
     }
 
-    public static OccurrenceRequestDto occurrenceRequestDtoValid(){
-        return OccurrenceRequestDto.builder()
-                .description("Descrição teste")
+    public static Occurrence occurrenceValid() {
+        return Occurrence.builder()
+                .description(VALID_DESCRIPTION)
+                .registerDate(OffsetDateTime.now())
+                .id(VALID_OCCURRENCE_ID)
+                .delivery(deliveryValid())
                 .build();
     }
 
-    public static OccurrenceResponseDto occurrenceResponseDtoValid(){
+    public static OccurrenceRequestDto occurrenceRequestDtoValid() {
+        return OccurrenceRequestDto.builder()
+                .description(VALID_DESCRIPTION)
+                .build();
+    }
+
+    public static OccurrenceResponseDto occurrenceResponseDtoValid() {
         return OccurrenceResponseDto.builder()
-                .description("Descrição teste")
+                .description(VALID_DESCRIPTION)
                 .registerDate(OffsetDateTime.now())
-                .id(1L)
+                .deliveryId(VALID_DELIVERY_ID)
+                .id(VALID_OCCURRENCE_ID)
                 .build();
     }
 }

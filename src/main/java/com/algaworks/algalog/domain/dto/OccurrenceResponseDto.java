@@ -19,5 +19,6 @@ public class OccurrenceResponseDto {
 
     private Long id;
     private String description;
+    private Long deliveryId;
     private OffsetDateTime registerDate;
 }
