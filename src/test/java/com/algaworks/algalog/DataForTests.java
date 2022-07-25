@@ -4,6 +4,8 @@ import com.algaworks.algalog.domain.dto.ClientRequestDto;
 import com.algaworks.algalog.domain.dto.ClientResponseDto;
 import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
 import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
+import com.algaworks.algalog.domain.dto.OccurrenceRequestDto;
+import com.algaworks.algalog.domain.dto.OccurrenceResponseDto;
 import com.algaworks.algalog.domain.enums.DeliveryStatus;
 
 import java.math.BigDecimal;
@@ -77,6 +79,20 @@ public abstract class DataForTests {
                 .recipientNumber(VALID_RECIPIENT_NUMBER)
                 .tax(VALID_TAX)
                 .recipientStreet(VALID_RECIPIENT_STREET)
+                .build();
+    }
+
+    public static OccurrenceRequestDto occurrenceRequestDtoValid(){
+        return OccurrenceRequestDto.builder()
+                .description("Descrição teste")
+                .build();
+    }
+
+    public static OccurrenceResponseDto occurrenceResponseDtoValid(){
+        return OccurrenceResponseDto.builder()
+                .description("Descrição teste")
+                .registerDate(OffsetDateTime.now())
+                .id(1L)
                 .build();
     }
 }

@@ -19,7 +19,8 @@ public class OccurrenceService {
     @Transactional
     public OccurrenceResponseDto registerOccurrence(Long deliveryId, String description) {
         var delivery = findDeliveryService.find(deliveryId);
-        return ParseObjects.occurrenceToOccurrenceResponseDto(delivery.addAndGetOccurrence(description));
+        var occurrence = delivery.addAndGetOccurrence(description);
+        return ParseObjects.occurrenceToOccurrenceResponseDto(occurrenceRepository.save(occurrence));
     }
 
     public List<OccurrenceResponseDto> findAllOccurrencesOfDelivery(Long deliveryId) {

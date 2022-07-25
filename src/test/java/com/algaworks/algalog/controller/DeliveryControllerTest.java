@@ -74,14 +74,14 @@ class DeliveryControllerTest extends BaseIntegrationTest {
     void shouldThrowBusinessException_whenDeliveryIdNotFound() throws Exception {
 
         when(deliveryCreationService.findById(INVALID_DELIVERY_ID))
-                .thenThrow(DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID)));
+                .thenThrow(DataForBusinessException.DELIVERY_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID)));
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI + "/{deliveryId}", INVALID_DELIVERY_ID)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message")
-                        .value(DataForBusinessException.CLIENT_NOT_FOUND.getMessage()));
+                        .value(DataForBusinessException.DELIVERY_NOT_FOUND.getMessage()));
 
     }
 
