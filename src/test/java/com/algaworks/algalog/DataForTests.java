@@ -14,6 +14,7 @@ import com.algaworks.algalog.domain.model.Recipient;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 
 public abstract class DataForTests {
@@ -41,6 +42,7 @@ public abstract class DataForTests {
     public final static String INVALID_NAME_WITH_FOUR_EQUALS_CHARACTERS_IN_SEQUENCE = "Teeee";
     public final static String INVALID_NAME_WITH_SPECIAL_CHARACTERS = "Teste2";
     public final static String INVALID_TELEPHONE = "739812132";
+    private static final OffsetDateTime NOW = OffsetDateTime.now();
 
 
     public static Client clientValid() {
@@ -71,7 +73,7 @@ public abstract class DataForTests {
 
 
     public static Delivery deliveryValid() {
-        return Delivery.builder()
+        var delivery = Delivery.builder()
                 .recipient(Recipient.builder()
                         .name(VALID_RECIPIENT_NAME)
                         .complement(VALID_RECIPIENT_COMPLEMENT)
@@ -83,9 +85,11 @@ public abstract class DataForTests {
                 .client(clientValid())
                 .tax(new BigDecimal("1.1"))
                 .id(VALID_DELIVERY_ID)
-                .orderedDate(OffsetDateTime.now())
-                .occurrences(Collections.singletonList(occurrenceValid()))
+                .orderedDate(NOW)
+                .occurrences(new ArrayList<>())
                 .build();
+        delivery.setOccurrences(Collections.singletonList(delivery.addAndGetOccurrence(VALID_DESCRIPTION)));
+        return delivery;
     }
 
     public static DeliveryResponseDto deliveryResponseDtoValid() {
@@ -96,7 +100,7 @@ public abstract class DataForTests {
                 .clientName(VALID_CLIENT_NAME)
                 .deliveryStatus(DeliveryStatus.PENDING)
                 .clientTelephone(VALID_CLIENT_TELEPHONE)
-                .orderedDate(OffsetDateTime.now())
+                .orderedDate(NOW)
                 .recipientComplement(VALID_RECIPIENT_COMPLEMENT)
                 .recipientNeighborhood(VALID_RECIPIENT_NEIGHBORHOOD)
                 .recipientName(VALID_RECIPIENT_NAME)
@@ -119,12 +123,9 @@ public abstract class DataForTests {
     }
 
     public static Occurrence occurrenceValid() {
-        return Occurrence.builder()
-                .description(VALID_DESCRIPTION)
-                .registerDate(OffsetDateTime.now())
-                .id(VALID_OCCURRENCE_ID)
-                .delivery(deliveryValid())
-                .build();
+        var occurrence = deliveryValid().getOccurrences().iterator().next();
+        occurrence.setId(VALID_OCCURRENCE_ID);
+        return occurrence;
     }
 
     public static OccurrenceRequestDto occurrenceRequestDtoValid() {
@@ -136,7 +137,7 @@ public abstract class DataForTests {
     public static OccurrenceResponseDto occurrenceResponseDtoValid() {
         return OccurrenceResponseDto.builder()
                 .description(VALID_DESCRIPTION)
-                .registerDate(OffsetDateTime.now())
+                .registerDate(NOW)
                 .deliveryId(VALID_DELIVERY_ID)
                 .id(VALID_OCCURRENCE_ID)
                 .build();
