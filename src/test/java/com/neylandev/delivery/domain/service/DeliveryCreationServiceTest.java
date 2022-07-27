@@ -59,7 +59,7 @@ class DeliveryCreationServiceTest {
 
         verify(deliveryRepository).save(deliveryArgumentCaptor.capture());
         var deliveryArgumentCaptorValue = deliveryArgumentCaptor.getValue();
-        assertEquals(client, deliveryArgumentCaptorValue.getClient());
+        assertEquals(client.getTelephone(), deliveryArgumentCaptorValue.getClient().getTelephone());
         assertNotNull(deliveryArgumentCaptorValue.getOrderedDate());
         assertNotNull(deliveryResponseDto);
         assertEquals(DeliveryStatus.PENDING, deliveryArgumentCaptorValue.getDeliveryStatus());
