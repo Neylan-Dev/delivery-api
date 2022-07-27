@@ -1,4 +1,4 @@
-<h1 align="center">Algalog-Api</h1>
+<h1 align="center">Delivery-Api</h1>
 
 <p align="center">
 <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white">
