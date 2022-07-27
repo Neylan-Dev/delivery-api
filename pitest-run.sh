@@ -1,0 +1,1 @@
+mvn clean test org.pitest:pitest-maven:mutationCoverage && open target/pit-reports/html2/index.html &
