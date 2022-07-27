@@ -1,10 +1,10 @@
 package com.neylandev.delivery;
 
 import com.neylandev.delivery.application.request.ClientRequestDto;
-import com.neylandev.delivery.application.response.ClientResponseDto;
 import com.neylandev.delivery.application.request.DeliveryRequestDto;
-import com.neylandev.delivery.application.response.DeliveryResponseDto;
 import com.neylandev.delivery.application.request.OccurrenceRequestDto;
+import com.neylandev.delivery.application.response.ClientResponseDto;
+import com.neylandev.delivery.application.response.DeliveryResponseDto;
 import com.neylandev.delivery.application.response.OccurrenceResponseDto;
 import com.neylandev.delivery.domain.enums.DeliveryStatus;
 import com.neylandev.delivery.domain.model.Client;
@@ -17,7 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public abstract class DataForTests {
+public abstract class DataForTests{
 
     public final static String VALID_EMAIL = "teste@teste.com";
     public final static String VALID_NAME = "Teste dos Santos";

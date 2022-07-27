@@ -1,7 +1,7 @@
 package com.neylandev.delivery.application.response;
 
-import com.neylandev.delivery.domain.enums.DeliveryStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.neylandev.delivery.domain.enums.DeliveryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.neylandev.delivery.application.request;
 
-import com.neylandev.delivery.domain.anotations.Name;
-import com.neylandev.delivery.domain.anotations.Telephone;
+import com.neylandev.delivery.domain.validator.Name;
+import com.neylandev.delivery.domain.validator.Telephone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

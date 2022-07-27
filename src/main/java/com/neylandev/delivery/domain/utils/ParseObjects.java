@@ -1,8 +1,8 @@
 package com.neylandev.delivery.domain.utils;
 
 import com.neylandev.delivery.application.request.ClientRequestDto;
-import com.neylandev.delivery.application.response.ClientResponseDto;
 import com.neylandev.delivery.application.request.DeliveryRequestDto;
+import com.neylandev.delivery.application.response.ClientResponseDto;
 import com.neylandev.delivery.application.response.DeliveryResponseDto;
 import com.neylandev.delivery.application.response.OccurrenceResponseDto;
 import com.neylandev.delivery.domain.model.Client;

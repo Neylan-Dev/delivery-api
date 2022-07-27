@@ -1,9 +1,9 @@
 package com.neylandev.delivery.domain.service;
 
-import com.neylandev.delivery.infrastructure.exception.BusinessException;
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
 import com.neylandev.delivery.domain.model.Delivery;
 import com.neylandev.delivery.domain.repository.DeliveryRepository;
+import com.neylandev.delivery.infrastructure.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
