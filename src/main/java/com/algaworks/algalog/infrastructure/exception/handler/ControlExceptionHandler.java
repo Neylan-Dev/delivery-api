@@ -1,6 +1,6 @@
-package com.algaworks.algalog.application.exception.handler;
+package com.algaworks.algalog.infrastructure.exception.handler;
 
-import com.algaworks.algalog.application.exception.BusinessException;
+import com.algaworks.algalog.infrastructure.exception.BusinessException;
 import com.algaworks.algalog.domain.enums.DataForBusinessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

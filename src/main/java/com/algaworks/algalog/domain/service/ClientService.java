@@ -1,7 +1,7 @@
 package com.algaworks.algalog.domain.service;
 
-import com.algaworks.algalog.domain.dto.ClientRequestDto;
-import com.algaworks.algalog.domain.dto.ClientResponseDto;
+import com.algaworks.algalog.application.request.ClientRequestDto;
+import com.algaworks.algalog.application.response.ClientResponseDto;
 import com.algaworks.algalog.domain.enums.DataForBusinessException;
 import com.algaworks.algalog.domain.repository.ClientRepository;
 import com.algaworks.algalog.domain.utils.ParseObjects;

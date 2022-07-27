@@ -1,7 +1,7 @@
-package com.algaworks.algalog.controller;
+package com.algaworks.algalog.application.controller;
 
-import com.algaworks.algalog.domain.dto.OccurrenceRequestDto;
-import com.algaworks.algalog.domain.dto.OccurrenceResponseDto;
+import com.algaworks.algalog.application.request.OccurrenceRequestDto;
+import com.algaworks.algalog.application.response.OccurrenceResponseDto;
 import com.algaworks.algalog.domain.service.OccurrenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

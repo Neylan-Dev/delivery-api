@@ -1,4 +1,4 @@
-package com.algaworks.algalog.application.exception;
+package com.algaworks.algalog.infrastructure.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

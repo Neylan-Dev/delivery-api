@@ -1,4 +1,4 @@
-package com.algaworks.algalog.domain.dto;
+package com.algaworks.algalog.application.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -7,18 +7,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
-
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OccurrenceResponseDto {
+public class ClientResponseDto {
 
     private Long id;
-    private String description;
-    private Long deliveryId;
-    private OffsetDateTime registerDate;
+    private String name;
+    private String email;
+    private String telephone;
+
 }

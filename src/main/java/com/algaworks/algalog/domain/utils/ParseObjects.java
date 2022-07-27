@@ -1,10 +1,10 @@
 package com.algaworks.algalog.domain.utils;
 
-import com.algaworks.algalog.domain.dto.ClientRequestDto;
-import com.algaworks.algalog.domain.dto.ClientResponseDto;
-import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
-import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
-import com.algaworks.algalog.domain.dto.OccurrenceResponseDto;
+import com.algaworks.algalog.application.request.ClientRequestDto;
+import com.algaworks.algalog.application.response.ClientResponseDto;
+import com.algaworks.algalog.application.request.DeliveryRequestDto;
+import com.algaworks.algalog.application.response.DeliveryResponseDto;
+import com.algaworks.algalog.application.response.OccurrenceResponseDto;
 import com.algaworks.algalog.domain.model.Client;
 import com.algaworks.algalog.domain.model.Delivery;
 import com.algaworks.algalog.domain.model.Occurrence;

@@ -1,7 +1,7 @@
-package com.algaworks.algalog.controller;
+package com.algaworks.algalog.application.controller;
 
-import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
-import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
+import com.algaworks.algalog.application.request.DeliveryRequestDto;
+import com.algaworks.algalog.application.response.DeliveryResponseDto;
 import com.algaworks.algalog.domain.service.DeliveryCompletionService;
 import com.algaworks.algalog.domain.service.DeliveryCreationService;
 import lombok.RequiredArgsConstructor;

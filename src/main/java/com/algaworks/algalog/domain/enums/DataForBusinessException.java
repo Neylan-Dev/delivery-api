@@ -1,6 +1,6 @@
 package com.algaworks.algalog.domain.enums;
 
-import com.algaworks.algalog.application.exception.BusinessException;
+import com.algaworks.algalog.infrastructure.exception.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

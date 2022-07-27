@@ -1,7 +1,7 @@
-package com.algaworks.algalog.controller;
+package com.algaworks.algalog.application.controller;
 
-import com.algaworks.algalog.domain.dto.ClientRequestDto;
-import com.algaworks.algalog.domain.dto.ClientResponseDto;
+import com.algaworks.algalog.application.request.ClientRequestDto;
+import com.algaworks.algalog.application.response.ClientResponseDto;
 import com.algaworks.algalog.domain.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

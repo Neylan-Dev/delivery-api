@@ -1,4 +1,4 @@
-package com.algaworks.algalog.domain.dto;
+package com.algaworks.algalog.application.response;
 
 import com.algaworks.algalog.domain.enums.DeliveryStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;

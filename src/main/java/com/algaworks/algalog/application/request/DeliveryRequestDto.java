@@ -1,4 +1,4 @@
-package com.algaworks.algalog.domain.dto;
+package com.algaworks.algalog.application.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

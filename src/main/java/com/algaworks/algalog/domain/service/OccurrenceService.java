@@ -1,6 +1,6 @@
 package com.algaworks.algalog.domain.service;
 
-import com.algaworks.algalog.domain.dto.OccurrenceResponseDto;
+import com.algaworks.algalog.application.response.OccurrenceResponseDto;
 import com.algaworks.algalog.domain.repository.OccurrenceRepository;
 import com.algaworks.algalog.domain.utils.ParseObjects;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.algaworks.algalog.domain.model;
 
-import com.algaworks.algalog.application.exception.BusinessException;
+import com.algaworks.algalog.infrastructure.exception.BusinessException;
 import com.algaworks.algalog.domain.enums.DataForBusinessException;
 import com.algaworks.algalog.domain.enums.DeliveryStatus;
 import org.junit.jupiter.api.Test;

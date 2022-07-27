@@ -1,4 +1,4 @@
-package com.algaworks.algalog.controller;
+package com.algaworks.algalog.application.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;

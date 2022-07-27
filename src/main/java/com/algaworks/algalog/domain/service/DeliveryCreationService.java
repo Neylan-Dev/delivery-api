@@ -1,7 +1,7 @@
 package com.algaworks.algalog.domain.service;
 
-import com.algaworks.algalog.domain.dto.DeliveryRequestDto;
-import com.algaworks.algalog.domain.dto.DeliveryResponseDto;
+import com.algaworks.algalog.application.request.DeliveryRequestDto;
+import com.algaworks.algalog.application.response.DeliveryResponseDto;
 import com.algaworks.algalog.domain.enums.DataForBusinessException;
 import com.algaworks.algalog.domain.enums.DeliveryStatus;
 import com.algaworks.algalog.domain.model.Client;

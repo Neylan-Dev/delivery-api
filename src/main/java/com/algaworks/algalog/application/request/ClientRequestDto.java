@@ -1,4 +1,4 @@
-package com.algaworks.algalog.domain.dto;
+package com.algaworks.algalog.application.request;
 
 import com.algaworks.algalog.domain.anotations.Name;
 import com.algaworks.algalog.domain.anotations.Telephone;
