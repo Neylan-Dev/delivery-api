@@ -15,7 +15,6 @@ import com.neylandev.delivery.domain.model.Recipient;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class DataForTests{
 
@@ -88,7 +87,7 @@ public abstract class DataForTests{
                 .orderedDate(NOW)
                 .occurrences(new ArrayList<>())
                 .build();
-        delivery.setOccurrences(Collections.singletonList(delivery.addAndGetOccurrence(VALID_DESCRIPTION)));
+        delivery.addAndGetOccurrence(VALID_DESCRIPTION);
         return delivery;
     }
 

@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
 import static com.neylandev.delivery.DataForTests.VALID_DELIVERY_ID;
 import static com.neylandev.delivery.DataForTests.VALID_DESCRIPTION;
+import static com.neylandev.delivery.DataForTests.VALID_OCCURRENCE_ID;
 import static com.neylandev.delivery.DataForTests.deliveryValid;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,6 +59,7 @@ class OccurrenceServiceTest {
     @Test
     void shouldReturnAllOccurrencesOfDelivery() {
         var delivery = deliveryValid();
+        delivery.getOccurrences().iterator().next().setId(VALID_OCCURRENCE_ID);
 
         when(findDeliveryService.find(VALID_DELIVERY_ID)).thenReturn(delivery);
 
