@@ -8,11 +8,11 @@
         <version>2.4.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.algaworks.algalog</groupId>
-    <artifactId>algalog-api</artifactId>
+    <groupId>com.neylandev.delivery</groupId>
+    <artifactId>delivery-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>algalog-api</name>
-    <description>Api do Algalog</description>
+    <name>delivery-api</name>
+    <description>Api do Delivery</description>
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
