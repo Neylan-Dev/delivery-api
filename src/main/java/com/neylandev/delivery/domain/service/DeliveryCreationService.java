@@ -21,10 +21,11 @@ public class DeliveryCreationService {
 
     private final DeliveryRepository deliveryRepository;
     private final ClientRepository clientRepository;
+    private final FindDeliveryService findDeliveryService;
 
     @Transactional
     public DeliveryResponseDto save(DeliveryRequestDto deliveryRequestDto) {
-        Client client = findClientById(deliveryRequestDto);
+        Client client = findClientById(deliveryRequestDto.getClientId());
         var delivery = ParseObjects.deliveryRequestDtoToDelivery(deliveryRequestDto);
         delivery.setDeliveryStatus(DeliveryStatus.PENDING);
         delivery.setOrderedDate(OffsetDateTime.now());
@@ -32,10 +33,10 @@ public class DeliveryCreationService {
         return ParseObjects.deliveryToDeliveryResponseDto(deliveryRepository.save(delivery));
     }
 
-    private Client findClientById(DeliveryRequestDto deliveryDto) {
-        return clientRepository.findById(deliveryDto.getClientId())
+    private Client findClientById(Long clientId) {
+        return clientRepository.findById(clientId)
                 .orElseThrow(() -> DataForBusinessException.CLIENT_DELIVERY_NOT_FOUND
-                        .asBusinessExceptionWithDescriptionFormatted(Long.toString(deliveryDto.getClientId())));
+                        .asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId)));
     }
 
     public List<DeliveryResponseDto> findAll() {
@@ -43,7 +44,6 @@ public class DeliveryCreationService {
     }
 
     public DeliveryResponseDto findById(Long deliveryId) {
-        return deliveryRepository.findById(deliveryId).map(ParseObjects::deliveryToDeliveryResponseDto)
-                .orElseThrow(() -> DataForBusinessException.DELIVERY_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(deliveryId)));
+        return ParseObjects.deliveryToDeliveryResponseDto(findDeliveryService.find(deliveryId));
     }
 }
