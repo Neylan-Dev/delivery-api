@@ -99,7 +99,7 @@
                     </outputFormats>
                     <excludedClasses>
                         <param>com.neylandev.delivery.DeliveryApiApplication</param>
-                        <param>com.neylandev.delivery.infrastructure.configuration</param>
+                        <param>com.neylandev.delivery.infrastructure.configuration.*</param>
                     </excludedClasses>
                     <timestampedReports>false</timestampedReports>
                 </configuration>

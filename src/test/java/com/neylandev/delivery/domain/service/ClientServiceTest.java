@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -95,11 +96,12 @@ class ClientServiceTest {
         when(clientRepository.existsById(client.getId())).thenReturn(true);
         when(clientRepository.save(any(Client.class))).thenReturn(client);
 
-        var clientResponseDtoList = clientService.update(client.getId(), clientRequestDto);
+        var clientResponseDto = clientService.update(client.getId(), clientRequestDto);
 
-        assertEquals(clientRequestDto.getEmail(), clientResponseDtoList.getEmail());
-        assertEquals(clientRequestDto.getName(), clientResponseDtoList.getName());
-        assertEquals(clientRequestDto.getTelephone(), clientResponseDtoList.getTelephone());
+        assertEquals(client.getId(), clientResponseDto.getId());
+        assertEquals(clientRequestDto.getEmail(), clientResponseDto.getEmail());
+        assertEquals(clientRequestDto.getName(), clientResponseDto.getName());
+        assertEquals(clientRequestDto.getTelephone(), clientResponseDto.getTelephone());
     }
 
     @Test
@@ -122,6 +124,7 @@ class ClientServiceTest {
         when(clientRepository.existsById(client.getId())).thenReturn(true);
 
         assertDoesNotThrow(() -> clientService.delete(client.getId()));
+        verify(clientRepository, atLeastOnce()).deleteById(anyLong());
     }
 
     @Test
