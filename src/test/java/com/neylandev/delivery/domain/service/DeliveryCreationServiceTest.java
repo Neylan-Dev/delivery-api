@@ -22,8 +22,8 @@ import static com.neylandev.delivery.DataForTests.VALID_CLIENT_ID;
 import static com.neylandev.delivery.DataForTests.clientValid;
 import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
 import static com.neylandev.delivery.DataForTests.deliveryValid;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -55,11 +55,13 @@ class DeliveryCreationServiceTest {
         when(clientRepository.findById(VALID_CLIENT_ID)).thenReturn(Optional.of(client));
         when(deliveryRepository.save(any(Delivery.class))).thenReturn(deliveryValid());
 
-        assertDoesNotThrow(() -> deliveryCreationService.save(deliveryRequestDto));
+        var deliveryResponseDto = deliveryCreationService.save(deliveryRequestDto);
 
         verify(deliveryRepository).save(deliveryArgumentCaptor.capture());
         var deliveryArgumentCaptorValue = deliveryArgumentCaptor.getValue();
         assertEquals(client, deliveryArgumentCaptorValue.getClient());
+        assertNotNull(deliveryArgumentCaptorValue.getOrderedDate());
+        assertNotNull(deliveryResponseDto);
         assertEquals(DeliveryStatus.PENDING, deliveryArgumentCaptorValue.getDeliveryStatus());
     }
 
@@ -68,9 +70,7 @@ class DeliveryCreationServiceTest {
         var deliveryRequestDto = deliveryRequestDtoValid();
         deliveryRequestDto.setClientId(INVALID_CLIENT_ID);
 
-        when(clientRepository.findById(INVALID_CLIENT_ID))
-                .thenThrow(DataForBusinessException.CLIENT_DELIVERY_NOT_FOUND
-                        .asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_CLIENT_ID)));
+        when(clientRepository.findById(INVALID_CLIENT_ID)).thenReturn(Optional.empty());
 
         assertThrows(BusinessException.class,
                 () -> deliveryCreationService.save(deliveryRequestDto),

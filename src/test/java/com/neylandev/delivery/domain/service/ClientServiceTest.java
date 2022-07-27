@@ -6,6 +6,7 @@ import com.neylandev.delivery.domain.repository.ClientRepository;
 import com.neylandev.delivery.infrastructure.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static com.neylandev.delivery.DataForTests.INVALID_CLIENT_ID;
+import static com.neylandev.delivery.DataForTests.VALID_CLIENT_ID;
 import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
 import static com.neylandev.delivery.DataForTests.clientValid;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -64,9 +66,7 @@ class ClientServiceTest {
 
     @Test
     void shouldThrowBusinessException_whenFindClientById() {
-        when(clientRepository.findById(INVALID_CLIENT_ID))
-                .thenThrow(DataForBusinessException.CLIENT_NOT_FOUND
-                        .asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_CLIENT_ID)));
+        when(clientRepository.findById(INVALID_CLIENT_ID)).thenReturn(Optional.empty());
 
         assertThrows(BusinessException.class, () -> clientService.findById(INVALID_CLIENT_ID),
                 DataForBusinessException.CLIENT_NOT_FOUND.getMessage());
@@ -93,12 +93,16 @@ class ClientServiceTest {
 
         var clientRequestDto = clientRequestDtoValid();
 
-        when(clientRepository.existsById(client.getId())).thenReturn(true);
+        when(clientRepository.existsById(VALID_CLIENT_ID)).thenReturn(true);
         when(clientRepository.save(any(Client.class))).thenReturn(client);
 
-        var clientResponseDto = clientService.update(client.getId(), clientRequestDto);
+        ArgumentCaptor<Client> clientArgumentCaptor = ArgumentCaptor.forClass(Client.class);
 
-        assertEquals(client.getId(), clientResponseDto.getId());
+        var clientResponseDto = clientService.update(VALID_CLIENT_ID, clientRequestDto);
+
+        verify(clientRepository, atLeastOnce()).save(clientArgumentCaptor.capture());
+        var clientArgumentCaptorValue = clientArgumentCaptor.getValue();
+        assertEquals(VALID_CLIENT_ID, clientArgumentCaptorValue.getId());
         assertEquals(clientRequestDto.getEmail(), clientResponseDto.getEmail());
         assertEquals(clientRequestDto.getName(), clientResponseDto.getName());
         assertEquals(clientRequestDto.getTelephone(), clientResponseDto.getTelephone());

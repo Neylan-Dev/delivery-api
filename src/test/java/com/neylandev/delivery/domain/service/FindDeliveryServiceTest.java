@@ -40,9 +40,7 @@ class FindDeliveryServiceTest {
     @Test
     void shouldThrowBusinessException_whenDeliveryNotFound() {
 
-        when(deliveryRepository.findById(INVALID_DELIVERY_ID))
-                .thenThrow(DataForBusinessException.DELIVERY_NOT_FOUND
-                        .asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID)));
+        when(deliveryRepository.findById(INVALID_DELIVERY_ID)).thenReturn(Optional.empty());
 
         assertThrows(BusinessException.class,
                 () -> findDeliveryService.find(INVALID_DELIVERY_ID),
