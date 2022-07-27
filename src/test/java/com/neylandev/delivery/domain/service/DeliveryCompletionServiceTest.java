@@ -1,11 +1,13 @@
 package com.neylandev.delivery.domain.service;
 
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
+import com.neylandev.delivery.domain.enums.DeliveryStatus;
 import com.neylandev.delivery.domain.model.Delivery;
 import com.neylandev.delivery.domain.repository.DeliveryRepository;
 import com.neylandev.delivery.infrastructure.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
 import static com.neylandev.delivery.DataForTests.deliveryValid;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,9 +39,12 @@ class DeliveryCompletionServiceTest {
 
         when(findDeliveryService.find(delivery.getId())).thenReturn(delivery);
 
+        ArgumentCaptor<Delivery> deliveryArgumentCaptor = ArgumentCaptor.forClass(Delivery.class);
         assertDoesNotThrow(() -> deliveryCompletionService.complete(delivery.getId()));
 
-        verify(deliveryRepository, atLeastOnce()).save(any(Delivery.class));
+        verify(deliveryRepository, atLeastOnce()).save(deliveryArgumentCaptor.capture());
+        var value = deliveryArgumentCaptor.getValue();
+        assertEquals(DeliveryStatus.FINALIZED, value.getDeliveryStatus());
     }
 
     @Test
@@ -58,9 +63,12 @@ class DeliveryCompletionServiceTest {
 
         when(findDeliveryService.find(delivery.getId())).thenReturn(delivery);
 
+        ArgumentCaptor<Delivery> deliveryArgumentCaptor = ArgumentCaptor.forClass(Delivery.class);
         assertDoesNotThrow(() -> deliveryCompletionService.cancel(delivery.getId()));
 
-        verify(deliveryRepository, atLeastOnce()).save(any(Delivery.class));
+        verify(deliveryRepository, atLeastOnce()).save(deliveryArgumentCaptor.capture());
+        var value = deliveryArgumentCaptor.getValue();
+        assertEquals(DeliveryStatus.CANCELLED, value.getDeliveryStatus());
     }
 
     @Test
