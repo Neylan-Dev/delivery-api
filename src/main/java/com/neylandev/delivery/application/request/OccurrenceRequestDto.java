@@ -1,5 +1,6 @@
 package com.neylandev.delivery.application.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,5 +17,6 @@ import javax.validation.constraints.NotBlank;
 public class OccurrenceRequestDto {
 
     @NotBlank
+    @ApiModelProperty(value = "Descrição", name = "description", dataType = "String", example = "Destinatário não estava em casa")
     private String description;
 }
