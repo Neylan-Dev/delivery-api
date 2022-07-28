@@ -14,6 +14,7 @@
 - [Java](https://www.java.com/pt-BR/)
 - [Mysql](https://www.mysql.com/)
 - [Pistest](https://pitest.org/)
+- [Swagger](https://swagger.io/)
 
 <hr>
 
@@ -21,7 +22,7 @@
 
 <p> Aplicação feita com spring boot que gerência dados de entregas de clientes onde é possível cadastrar/atualizar/excluir o mesmo permitindo que o mesmo seja relacionado com entrega. As entregas são compostas por estados: PENDENTE, FINALIZADO e CANCELADO, onde a aplicação permite a mudança dos estados de acordos com as regras definidas, e também é composta por ocorrências onde pode definir uma mensagem explicando o que aconteceu na entrega como por exemplo: a pessoa que iria receber o produto não estava em casa.</p>
 
-<p> Nesse projeto foram implementados, validações por meio da criação de anotações especificas, camada de modelo, repositórios, controladores, camada de serviço, DTOs para requisição e resposta, exception personalizada, exception handler, model mapper (responsável por fazer o parse de um objeto para outro), testes de integração, testes de unidade e etc.</p>
+<p> Nesse projeto foram implementados, validações por meio da criação de anotações especificas, camada de modelo, repositórios, controladores, camada de serviço, DTOs para requisição e resposta, exception personalizada, exception handler, model mapper (responsável por fazer o parse de um objeto para outro), testes de integração, testes de unidade, testes de mutação com pitest, documentação de api com swagger e etc.</p>
 
 <hr>
 
