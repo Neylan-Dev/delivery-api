@@ -13,6 +13,7 @@
 - [Spring](https://spring.io/)
 - [Java](https://www.java.com/pt-BR/)
 - [Mysql](https://www.mysql.com/)
+- [Pistest](https://pitest.org/)
 
 <hr>
 
