@@ -30,3 +30,9 @@
 
 - [Delivery-Common](https://github.com/Neylan-Dev/delivery-common)
 - Delivery-Api
+
+<hr>
+
+<h2 id="execucao">🚀 Executando projetos </h1>
+
+<p> Para executar qualquer modulo, o modulo de Delivery-Common deve ser clonado e dentro dele, o terminal dever ser aberto e executado o comando 'mvn clean install' para gerar um arquivo .jar que será usado automaticamente nos demais módulos. Após isso é só executar o módulo que deseja </p>
