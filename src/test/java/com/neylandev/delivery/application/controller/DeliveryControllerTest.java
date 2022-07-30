@@ -13,17 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
 
-import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.VALID_CLIENT_ID;
-import static com.neylandev.delivery.DataForTests.VALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_COMPLEMENT;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_NAME;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_NEIGHBORHOOD;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_NUMBER;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_STREET;
-import static com.neylandev.delivery.DataForTests.VALID_TAX;
-import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
-import static com.neylandev.delivery.DataForTests.deliveryResponseDtoValid;
+import static com.neylandev.delivery.DataForTests.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;

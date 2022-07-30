@@ -12,10 +12,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
 
-import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.VALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.occurrenceRequestDtoValid;
-import static com.neylandev.delivery.DataForTests.occurrenceResponseDtoValid;
+import static com.neylandev.delivery.DataForTests.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;

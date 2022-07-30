@@ -3,11 +3,7 @@ package com.neylandev.delivery.application.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.neylandev.delivery.domain.enums.DeliveryStatus;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

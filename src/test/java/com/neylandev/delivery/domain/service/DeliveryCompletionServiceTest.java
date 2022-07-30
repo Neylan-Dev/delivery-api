@@ -14,12 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
 import static com.neylandev.delivery.DataForTests.deliveryValid;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeliveryCompletionServiceTest {

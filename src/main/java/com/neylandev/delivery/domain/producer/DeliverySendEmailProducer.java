@@ -1,5 +1,6 @@
 package com.neylandev.delivery.domain.producer;
 
+import com.neylandev.delivery.domain.dto.DeliveryEmailDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -14,7 +15,7 @@ public class DeliverySendEmailProducer {
     private final ProducerTemplate producerTemplate;
 
     @Async
-    public void send(){
-        producerTemplate.sendBody(null);
+    public void send(DeliveryEmailDto deliveryEmailDto){
+        producerTemplate.sendBody(deliveryEmailDto);
     }
 }

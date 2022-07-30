@@ -3,11 +3,7 @@ package com.neylandev.delivery.application.request;
 import com.neylandev.delivery.domain.validator.Name;
 import com.neylandev.delivery.domain.validator.Telephone;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

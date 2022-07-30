@@ -10,11 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.VALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.VALID_DESCRIPTION;
-import static com.neylandev.delivery.DataForTests.VALID_OCCURRENCE_ID;
-import static com.neylandev.delivery.DataForTests.deliveryValid;
+import static com.neylandev.delivery.DataForTests.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

@@ -12,18 +12,19 @@ public class DeliveryCompletionService {
 
     private final DeliveryRepository deliveryRepository;
     private final FindDeliveryService findDeliveryService;
+    private final DeliverySendEmailService deliverySendEmailService;
 
     @Transactional
     public void complete(Long deliveryId) {
         Delivery delivery = findDeliveryService.find(deliveryId);
         delivery.complete();
-        deliveryRepository.save(delivery);
+        deliverySendEmailService.sendEmail(deliveryRepository.save(delivery));
     }
 
     @Transactional
     public void cancel(Long deliveryId) {
         Delivery delivery = findDeliveryService.find(deliveryId);
         delivery.cancel();
-        deliveryRepository.save(delivery);
+        deliverySendEmailService.sendEmail(deliveryRepository.save(delivery));
     }
 }
