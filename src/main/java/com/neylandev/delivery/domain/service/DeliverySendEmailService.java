@@ -14,13 +14,23 @@ public class DeliverySendEmailService {
     private final DeliverySendEmailProducer deliverySendEmailProducer;
 
     public void sendEmail(Delivery delivery){
-        DeliveryEmailDto deliveryEmailDto = DeliveryEmailDto.builder()
-                .clientEmail(delivery.getClient().getEmail())
-                .clientName(delivery.getClient().getName())
-                .bodyMessage(delivery.getDeliveryStatus().equals(DeliveryStatus.FINALIZED)
-                        ? "O produto foi recebido com sucesso"
-                        : "O o produto não pode ser enviado, portanto a venda será cancelada")
-                .build();
+        DeliveryEmailDto deliveryEmailDto = delivery.getDeliveryStatus().equals(DeliveryStatus.FINALIZED) ? getDeliveryEmailDtoFinalized(delivery) : getDeliveryEmailDtoCanceled(delivery);
         deliverySendEmailProducer.send(deliveryEmailDto);
+    }
+
+    private DeliveryEmailDto getDeliveryEmailDtoCanceled(Delivery delivery) {
+        return DeliveryEmailDto.builder()
+                .clientEmail(delivery.getClient().getEmail())
+                .subject("O envio do produto foi cancelado")
+                .body(String.format("O produto de %s não pode ser enviado", delivery.getClient().getName()))
+                .build();
+    }
+
+    private DeliveryEmailDto getDeliveryEmailDtoFinalized(Delivery delivery) {
+        return DeliveryEmailDto.builder()
+                .clientEmail(delivery.getClient().getEmail())
+                .subject("Produto recebido com sucesso")
+                .body(String.format("O produto de %s foi recebido por %s", delivery.getClient().getName(), delivery.getRecipient().getName()))
+                .build();
     }
 }
