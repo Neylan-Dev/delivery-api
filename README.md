@@ -39,3 +39,7 @@
 <h2 id="execucao">🚀 Executando projetos </h1>
 
 <p> Para executar qualquer modulo, o modulo de Delivery-Common deve ser clonado e dentro dele, o terminal dever ser aberto e executado o comando 'mvn clean install' para gerar um arquivo .jar que será usado automaticamente nos demais módulos. Após isso é só executar o módulo que deseja </p>
+
+<p> O modulo Delivery-Api, necessita do Mysql e RabbitMq, as propriedades são setadas no application.properties</p>
+
+<p> O modulo Delivery-Send-Email, necessita do RabbitMq e de um servidor smtp, as propriedades são setadas no application.properties</p>
