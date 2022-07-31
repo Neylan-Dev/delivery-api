@@ -1,6 +1,7 @@
 package com.neylandev.delivery.domain.producer;
 
 import com.neylandev.delivery.domain.dto.DeliveryEmailDto;
+import com.neylandev.delivery.domain.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DeliverySendEmailProducer {
 
-    @Produce(uri = "${rabbitmq.camel.directSendEmail}")
+    @Produce(uri = Constants.DIRECT_SEND_EMAIL)
     private final ProducerTemplate producerTemplate;
 
     @Async
