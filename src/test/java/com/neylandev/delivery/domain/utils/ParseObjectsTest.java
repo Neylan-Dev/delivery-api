@@ -4,7 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static com.neylandev.delivery.DataForTests.*;
+import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
+import static com.neylandev.delivery.DataForTests.clientValid;
+import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
+import static com.neylandev.delivery.DataForTests.deliveryValid;
+import static com.neylandev.delivery.DataForTests.occurrenceValid;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ParseObjectsTest {

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DeliverySendEmailProducer {
 
-    @Produce(uri = Constants.DIRECT_SEND_EMAIL)
+    @Produce(Constants.DIRECT_SEND_EMAIL)
     private final ProducerTemplate producerTemplate;
 
     @Async

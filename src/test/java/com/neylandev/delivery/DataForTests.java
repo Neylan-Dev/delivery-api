@@ -43,7 +43,6 @@ public abstract class DataForTests{
     public final static String INVALID_TELEPHONE = "739812132";
     private static final OffsetDateTime NOW = OffsetDateTime.now();
 
-
     public static Client clientValid() {
         return Client.builder()
                 .email(VALID_EMAIL)

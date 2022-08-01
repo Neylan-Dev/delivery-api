@@ -3,19 +3,21 @@ package com.neylandev.delivery.application.controller;
 import com.neylandev.delivery.application.request.OccurrenceRequestDto;
 import com.neylandev.delivery.application.response.OccurrenceResponseDto;
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
+import com.neylandev.delivery.domain.repository.ClientRepository;
+import com.neylandev.delivery.domain.repository.DeliveryRepository;
+import com.neylandev.delivery.domain.repository.OccurrenceRepository;
+import com.neylandev.delivery.domain.service.ClientService;
+import com.neylandev.delivery.domain.service.DeliveryCreationService;
 import com.neylandev.delivery.domain.service.OccurrenceService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Collections;
-
-import static com.neylandev.delivery.DataForTests.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
+import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
+import static com.neylandev.delivery.DataForTests.occurrenceRequestDtoValid;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,29 +25,38 @@ class OccurrenceControllerTest extends BaseIntegrationTest {
 
     private final static String URI = "/deliveries/{deliveryId}/occurrences";
 
-    @MockBean
     private OccurrenceService occurrenceService;
+    private InitialDataForTests initialDataForTests;
+
+
+    @BeforeAll
+    public void init() {
+        occurrenceService = webApplicationContext.getBean(OccurrenceService.class);
+        ClientService clientService = webApplicationContext.getBean(ClientService.class);
+        DeliveryCreationService deliveryCreationService = webApplicationContext.getBean(DeliveryCreationService.class);
+        OccurrenceRepository occurrenceRepository = webApplicationContext.getBean(OccurrenceRepository.class);
+        DeliveryRepository deliveryRepository = webApplicationContext.getBean(DeliveryRepository.class);
+        ClientRepository clientRepository = webApplicationContext.getBean(ClientRepository.class);
+        initialDataForTests = new InitialDataForTests(clientService, clientRepository, deliveryCreationService, deliveryRepository, occurrenceService, occurrenceRepository);
+    }
 
     @Test
     void shouldReturnAllOccurrencesFromDelivery() throws Exception {
 
-        OccurrenceResponseDto occurrenceResponseDto = occurrenceResponseDtoValid();
-
-        when(occurrenceService.findAllOccurrencesOfDelivery(occurrenceResponseDto.getId())).thenReturn(Collections.singletonList(occurrenceResponseDto));
+        OccurrenceResponseDto occurrenceResponseDto = initialDataForTests.createOccurrence(occurrenceRequestDtoValid());
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get(URI, VALID_DELIVERY_ID)
+                .perform(MockMvcRequestBuilders.get(URI, occurrenceResponseDto.getDeliveryId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(VALID_DELIVERY_ID));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(occurrenceResponseDto.getDeliveryId()));
+
+        initialDataForTests.deleteOccurrence();
 
     }
 
     @Test
     void shouldThrowBusinessExceptionInAllOccurrencesFromDelivery_whenDeliveryIdNotFound() throws Exception {
-
-        when(occurrenceService.findAllOccurrencesOfDelivery(INVALID_DELIVERY_ID))
-                .thenThrow(DataForBusinessException.DELIVERY_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID)));
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI, INVALID_DELIVERY_ID)
@@ -58,29 +69,24 @@ class OccurrenceControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldRegisterOccurrenceAndReturnOccurrenceResponse_whenOccurrenceRequestDtoValidWasPassed() throws Exception {
-
-        OccurrenceResponseDto occurrenceResponseDto = occurrenceResponseDtoValid();
+        var delivery = initialDataForTests.createDelivery(deliveryRequestDtoValid());
 
         OccurrenceRequestDto occurrenceRequestDto = occurrenceRequestDtoValid();
 
-        when(occurrenceService.registerOccurrence(anyLong(), anyString())).thenReturn(occurrenceResponseDto);
-
         this.mockMvc
-                .perform(MockMvcRequestBuilders.post(URI, VALID_DELIVERY_ID)
+                .perform(MockMvcRequestBuilders.post(URI, delivery.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(occurrenceRequestDto)))
                 .andDo(print()).andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(VALID_DELIVERY_ID));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(delivery.getId()));
 
+        initialDataForTests.deleteOccurrence();
     }
 
     @Test
     void shouldThrowBusinessExceptionInRegisterOccurrence_whenDeliveryIdNotFound() throws Exception {
 
         OccurrenceRequestDto occurrenceRequestDto = occurrenceRequestDtoValid();
-
-        when(occurrenceService.registerOccurrence(INVALID_DELIVERY_ID, occurrenceRequestDto.getDescription()))
-                .thenThrow(DataForBusinessException.DELIVERY_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID)));
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI, INVALID_DELIVERY_ID)

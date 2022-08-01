@@ -1,22 +1,25 @@
 package com.neylandev.delivery.application.controller;
 
 import com.neylandev.delivery.application.request.ClientRequestDto;
-import com.neylandev.delivery.application.response.ClientResponseDto;
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
 import com.neylandev.delivery.domain.service.ClientService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Collections;
-
-import static com.neylandev.delivery.DataForTests.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static com.neylandev.delivery.DataForTests.INVALID_CLIENT_ID;
+import static com.neylandev.delivery.DataForTests.INVALID_EMAIL;
+import static com.neylandev.delivery.DataForTests.INVALID_NAME_WITH_FOUR_EQUALS_CHARACTERS_IN_SEQUENCE;
+import static com.neylandev.delivery.DataForTests.INVALID_NAME_WITH_SPECIAL_CHARACTERS;
+import static com.neylandev.delivery.DataForTests.INVALID_SIZE_NAME;
+import static com.neylandev.delivery.DataForTests.INVALID_TELEPHONE;
+import static com.neylandev.delivery.DataForTests.VALID_CLIENT_ID;
+import static com.neylandev.delivery.DataForTests.VALID_EMAIL;
+import static com.neylandev.delivery.DataForTests.VALID_NAME;
+import static com.neylandev.delivery.DataForTests.VALID_TELEPHONE;
+import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,15 +27,18 @@ class ClientControllerTest extends BaseIntegrationTest {
 
     private final static String URI = "/clients";
 
-    @MockBean
     private ClientService clientService;
+    private InitialDataForTests initialDataForTests;
+
+    @BeforeAll
+    public void init() {
+        clientService = webApplicationContext.getBean(ClientService.class);
+        initialDataForTests = new InitialDataForTests(clientService);
+    }
 
     @Test
     void shouldReturnAllClients() throws Exception {
-
-        ClientResponseDto clientResponseDto = clientResponseDtoValid();
-
-        when(clientService.findAll()).thenReturn(Collections.singletonList(clientResponseDto));
+        var clientResponseDto = initialDataForTests.createClient(clientRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI)
@@ -40,14 +46,12 @@ class ClientControllerTest extends BaseIntegrationTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(clientResponseDto.getId()));
 
+        initialDataForTests.deleteClient(clientResponseDto.getId());
     }
 
     @Test
     void shouldReturnClientResponseDto_whenClientIdFound() throws Exception {
-
-        ClientResponseDto clientResponseDto = clientResponseDtoValid();
-
-        when(clientService.findById(clientResponseDto.getId())).thenReturn(clientResponseDto);
+        var clientResponseDto = initialDataForTests.createClient(clientRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI + "/{clientId}", clientResponseDto.getId())
@@ -55,13 +59,11 @@ class ClientControllerTest extends BaseIntegrationTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(clientResponseDto.getId()));
 
+        initialDataForTests.deleteClient(clientResponseDto.getId());
     }
 
     @Test
     void shouldThrowBusinessException_whenClientIdNotFound() throws Exception {
-
-        when(clientService.findById(INVALID_CLIENT_ID))
-                .thenThrow(DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_CLIENT_ID)));
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI + "/{clientId}", INVALID_CLIENT_ID)
@@ -75,18 +77,14 @@ class ClientControllerTest extends BaseIntegrationTest {
     @Test
     void shouldSaveClientAndReturnClientResponse_whenClientRequestDtoValidWasPassed() throws Exception {
 
-        ClientResponseDto clientResponseDto = clientResponseDtoValid();
-
         ClientRequestDto clientRequestDto = clientRequestDtoValid();
-
-        when(clientService.create(any(ClientRequestDto.class))).thenReturn(clientResponseDto);
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(clientRequestDto)))
                 .andDo(print()).andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(clientResponseDto.getId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(clientRequestDto.getName()));
 
     }
 
@@ -240,11 +238,9 @@ class ClientControllerTest extends BaseIntegrationTest {
     @Test
     void shouldUpdateClientAndReturnClientResponse_whenClientRequestDtoValidWasPassed() throws Exception {
 
-        ClientResponseDto clientResponseDto = clientResponseDtoValid();
+        var clientResponseDto = initialDataForTests.createClient(clientRequestDtoValid());
 
         ClientRequestDto clientRequestDto = clientRequestDtoValid();
-
-        when(clientService.update(anyLong(), any(ClientRequestDto.class))).thenReturn(clientResponseDto);
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.put(URI + "/{clientId}", clientResponseDto.getId())
@@ -259,9 +255,6 @@ class ClientControllerTest extends BaseIntegrationTest {
     void shouldThrowBusinessException_whenClientRequestDtoValidAndClientIdNotFoundWasPassedAndUpdateWasCalled() throws Exception {
 
         ClientRequestDto clientRequestDto = clientRequestDtoValid();
-
-        when(clientService.update(anyLong(), any(ClientRequestDto.class)))
-                .thenThrow(DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_CLIENT_ID)));
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.put(URI + "/{clientId}", INVALID_CLIENT_ID)
@@ -422,8 +415,10 @@ class ClientControllerTest extends BaseIntegrationTest {
     @Test
     void shouldDeleteClient_whenClientIdWasFound() throws Exception {
 
+        var clientResponseDto = initialDataForTests.createClient(clientRequestDtoValid());
+
         this.mockMvc
-                .perform(MockMvcRequestBuilders.delete(URI + "/{clientId}", VALID_CLIENT_ID)
+                .perform(MockMvcRequestBuilders.delete(URI + "/{clientId}", clientResponseDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isNoContent());
 
@@ -431,8 +426,6 @@ class ClientControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldThrowBusinessException_whenClientIdNotFoundWasPassedAndDeleteWasCalled() throws Exception {
-
-        doThrow(DataForBusinessException.CLIENT_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_CLIENT_ID))).when(clientService).delete(anyLong());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.delete(URI + "/{clientId}", INVALID_CLIENT_ID)

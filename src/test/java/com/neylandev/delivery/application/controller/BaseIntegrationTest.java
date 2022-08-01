@@ -1,6 +1,7 @@
 package com.neylandev.delivery.application.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.camel.test.spring.junit5.CamelSpringBootTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,10 +19,11 @@ import org.springframework.web.context.WebApplicationContext;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.AUTO_CONFIGURED)
+@CamelSpringBootTest
 abstract class BaseIntegrationTest {
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    protected WebApplicationContext webApplicationContext;
 
     protected MockMvc mockMvc;
 

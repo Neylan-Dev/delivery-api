@@ -14,11 +14,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.neylandev.delivery.DataForTests.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.neylandev.delivery.DataForTests.INVALID_CLIENT_ID;
+import static com.neylandev.delivery.DataForTests.VALID_CLIENT_ID;
+import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
+import static com.neylandev.delivery.DataForTests.clientValid;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ClientServiceTest {

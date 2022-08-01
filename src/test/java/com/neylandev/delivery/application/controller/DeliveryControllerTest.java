@@ -1,23 +1,29 @@
 package com.neylandev.delivery.application.controller;
 
 import com.neylandev.delivery.application.request.DeliveryRequestDto;
-import com.neylandev.delivery.application.response.DeliveryResponseDto;
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
-import com.neylandev.delivery.domain.service.DeliveryCompletionService;
+import com.neylandev.delivery.domain.producer.DeliverySendEmailProducer;
+import com.neylandev.delivery.domain.repository.ClientRepository;
+import com.neylandev.delivery.domain.repository.DeliveryRepository;
+import com.neylandev.delivery.domain.service.ClientService;
 import com.neylandev.delivery.domain.service.DeliveryCreationService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Collections;
-
-import static com.neylandev.delivery.DataForTests.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
+import static com.neylandev.delivery.DataForTests.VALID_CLIENT_ID;
+import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_COMPLEMENT;
+import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_NAME;
+import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_NEIGHBORHOOD;
+import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_NUMBER;
+import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_STREET;
+import static com.neylandev.delivery.DataForTests.VALID_TAX;
+import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
+import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,17 +31,26 @@ class DeliveryControllerTest extends BaseIntegrationTest {
 
     private final static String URI = "/deliveries";
 
-    @MockBean
-    private DeliveryCompletionService deliveryCompletionService;
-    @MockBean
+    private ClientService clientService;
     private DeliveryCreationService deliveryCreationService;
+    private DeliveryRepository deliveryRepository;
+    private ClientRepository clientRepository;
+    @MockBean
+    private DeliverySendEmailProducer deliverySendEmailProducer;
+    private InitialDataForTests initialDataForTests;
+
+    @BeforeAll
+    public void init() {
+        clientService = webApplicationContext.getBean(ClientService.class);
+        deliveryCreationService = webApplicationContext.getBean(DeliveryCreationService.class);
+        deliveryRepository = webApplicationContext.getBean(DeliveryRepository.class);
+        clientRepository = webApplicationContext.getBean(ClientRepository.class);
+        initialDataForTests = new InitialDataForTests(clientService, clientRepository, deliveryCreationService, deliveryRepository);
+    }
 
     @Test
     void shouldReturnAllDeliveries() throws Exception {
-
-        DeliveryResponseDto deliveryResponseDto = deliveryResponseDtoValid();
-
-        when(deliveryCreationService.findAll()).thenReturn(Collections.singletonList(deliveryResponseDto));
+        var deliveryResponseDto = initialDataForTests.createDelivery(deliveryRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI)
@@ -43,14 +58,12 @@ class DeliveryControllerTest extends BaseIntegrationTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(deliveryResponseDto.getId()));
 
+        initialDataForTests.deleteDelivery();
     }
 
     @Test
     void shouldReturnDeliveryResponseDto_whenDeliveryIdFound() throws Exception {
-
-        DeliveryResponseDto deliveryResponseDto = deliveryResponseDtoValid();
-
-        when(deliveryCreationService.findById(deliveryResponseDto.getId())).thenReturn(deliveryResponseDto);
+        var deliveryResponseDto = initialDataForTests.createDelivery(deliveryRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI + "/{deliveryId}", deliveryResponseDto.getId())
@@ -58,13 +71,11 @@ class DeliveryControllerTest extends BaseIntegrationTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(deliveryResponseDto.getId()));
 
+        initialDataForTests.deleteDelivery();
     }
 
     @Test
     void shouldThrowBusinessException_whenDeliveryIdNotFound() throws Exception {
-
-        when(deliveryCreationService.findById(INVALID_DELIVERY_ID))
-                .thenThrow(DataForBusinessException.DELIVERY_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID)));
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI + "/{deliveryId}", INVALID_DELIVERY_ID)
@@ -77,20 +88,19 @@ class DeliveryControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldSaveDeliveryAndReturnDeliveryResponse_whenDeliveryRequestDtoValidWasPassed() throws Exception {
-
-        DeliveryResponseDto deliveryResponseDto = deliveryResponseDtoValid();
+        var client = initialDataForTests.createClient(clientRequestDtoValid());
 
         DeliveryRequestDto deliveryRequestDto = deliveryRequestDtoValid();
-
-        when(deliveryCreationService.save(any(DeliveryRequestDto.class))).thenReturn(deliveryResponseDto);
+        deliveryRequestDto.setClientId(client.getId());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(deliveryRequestDto)))
                 .andDo(print()).andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(VALID_DELIVERY_ID));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.recipientName").value(deliveryRequestDto.getRecipientName()));
 
+        initialDataForTests.deleteDelivery();
     }
 
     @Test
@@ -227,28 +237,30 @@ class DeliveryControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldCompleteDelivery_whenDeliveryIdWasFound() throws Exception {
+        var deliveryResponseDto = initialDataForTests.createDelivery(deliveryRequestDtoValid());
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.put(URI + "/{deliveryId}/complete", VALID_DELIVERY_ID)
+                .perform(MockMvcRequestBuilders.put(URI + "/{deliveryId}/complete", deliveryResponseDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isNoContent());
 
+        initialDataForTests.deleteDelivery();
     }
 
     @Test
     void shouldCancelDelivery_whenDeliveryIdWasFound() throws Exception {
+        var deliveryResponseDto = initialDataForTests.createDelivery(deliveryRequestDtoValid());
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.put(URI + "/{deliveryId}/cancel", VALID_DELIVERY_ID)
+                .perform(MockMvcRequestBuilders.put(URI + "/{deliveryId}/cancel", deliveryResponseDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isNoContent());
 
+        initialDataForTests.deleteDelivery();
     }
 
     @Test
     void shouldThrowBusinessException_whenDeliveryIdNotFoundWasPassedAndCompleteWasCalled() throws Exception {
-
-        doThrow(DataForBusinessException.DELIVERY_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID))).when(deliveryCompletionService).complete(anyLong());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.put(URI + "/{deliveryId}/complete", INVALID_DELIVERY_ID)
@@ -260,8 +272,6 @@ class DeliveryControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldThrowBusinessException_whenDeliveryIdNotFoundWasPassedAndCancelWasCalled() throws Exception {
-
-        doThrow(DataForBusinessException.DELIVERY_NOT_FOUND.asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID))).when(deliveryCompletionService).cancel(anyLong());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.put(URI + "/{deliveryId}/cancel", INVALID_DELIVERY_ID)

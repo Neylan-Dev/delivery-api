@@ -20,7 +20,7 @@
         <pitest.maven.version>1.7.1</pitest.maven.version>
         <pitest-junit5-plugin.version>0.14</pitest-junit5-plugin.version>
         <pitest-mutation-testing-elements-plugin.version>0.4.0</pitest-mutation-testing-elements-plugin.version>
-        <apache.camel.version>2.17.0</apache.camel.version>
+        <apache.camel.version>3.0.0-M4</apache.camel.version>
         <swagger.version>2.9.2</swagger.version>
     </properties>
     <dependencies>
@@ -104,6 +104,12 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-rabbitmq</artifactId>
             <version>${apache.camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-spring-junit5</artifactId>
+            <version>3.0.0</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
