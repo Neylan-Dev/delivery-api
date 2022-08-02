@@ -7,7 +7,7 @@ import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RabbitMQRoute extends RouteBuilder {
+public class RabbitMQRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() {

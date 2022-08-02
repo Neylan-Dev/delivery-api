@@ -17,27 +17,27 @@ import static com.neylandev.delivery.DataForTests.VALID_DESCRIPTION;
 import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
 import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
 
-public class InitialDataForTests {
+public class InitialDataForIntegrationTests {
     
-    private ClientService clientService;
+    private final ClientService clientService;
     private DeliveryCreationService deliveryCreationService;
     private OccurrenceService occurrenceService;
     private DeliveryRepository deliveryRepository;
     private ClientRepository clientRepository;
     private OccurrenceRepository occurrenceRepository;
 
-    public InitialDataForTests(ClientService clientService){
+    public InitialDataForIntegrationTests(ClientService clientService){
         this.clientService = clientService;
     }
 
-    public InitialDataForTests(ClientService clientService, ClientRepository clientRepository, DeliveryCreationService deliveryCreationService, DeliveryRepository deliveryRepository){
+    public InitialDataForIntegrationTests(ClientService clientService, ClientRepository clientRepository, DeliveryCreationService deliveryCreationService, DeliveryRepository deliveryRepository){
         this.clientService = clientService;
         this.clientRepository = clientRepository;
         this.deliveryCreationService = deliveryCreationService;
         this.deliveryRepository = deliveryRepository;
     }
 
-    public InitialDataForTests(ClientService clientService, ClientRepository clientRepository, DeliveryCreationService deliveryCreationService, DeliveryRepository deliveryRepository, OccurrenceService occurrenceService, OccurrenceRepository occurrenceRepository){
+    public InitialDataForIntegrationTests(ClientService clientService, ClientRepository clientRepository, DeliveryCreationService deliveryCreationService, DeliveryRepository deliveryRepository, OccurrenceService occurrenceService, OccurrenceRepository occurrenceRepository){
         this.clientService = clientService;
         this.clientRepository = clientRepository;
         this.deliveryCreationService = deliveryCreationService;

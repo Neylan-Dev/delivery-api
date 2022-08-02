@@ -1,15 +1,21 @@
 package com.neylandev.delivery.application.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neylandev.delivery.application.request.DeliveryRequestDto;
+import com.neylandev.delivery.domain.dto.DeliveryEmailDto;
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
-import com.neylandev.delivery.domain.producer.DeliverySendEmailProducer;
 import com.neylandev.delivery.domain.repository.ClientRepository;
 import com.neylandev.delivery.domain.repository.DeliveryRepository;
 import com.neylandev.delivery.domain.service.ClientService;
 import com.neylandev.delivery.domain.service.DeliveryCreationService;
+import org.apache.camel.CamelContext;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.test.spring.junit5.MockEndpoints;
+import org.apache.camel.test.spring.junit5.UseAdviceWith;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -27,30 +33,32 @@ import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class DeliveryControllerTest extends BaseIntegrationTest {
+@MockEndpoints
+@UseAdviceWith
+class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
 
     private final static String URI = "/deliveries";
 
-    private ClientService clientService;
-    private DeliveryCreationService deliveryCreationService;
-    private DeliveryRepository deliveryRepository;
-    private ClientRepository clientRepository;
-    @MockBean
-    private DeliverySendEmailProducer deliverySendEmailProducer;
-    private InitialDataForTests initialDataForTests;
+    private InitialDataForIntegrationTests initialDataForIntegrationTests;
+
+    @Autowired
+    CamelContext camelContext;
+
+    @EndpointInject("{{to.delivery.email}}")
+    MockEndpoint deliverySendEmailMockEndpoint;
 
     @BeforeAll
     public void init() {
-        clientService = webApplicationContext.getBean(ClientService.class);
-        deliveryCreationService = webApplicationContext.getBean(DeliveryCreationService.class);
-        deliveryRepository = webApplicationContext.getBean(DeliveryRepository.class);
-        clientRepository = webApplicationContext.getBean(ClientRepository.class);
-        initialDataForTests = new InitialDataForTests(clientService, clientRepository, deliveryCreationService, deliveryRepository);
+        ClientService clientService = webApplicationContext.getBean(ClientService.class);
+        DeliveryCreationService deliveryCreationService = webApplicationContext.getBean(DeliveryCreationService.class);
+        DeliveryRepository deliveryRepository = webApplicationContext.getBean(DeliveryRepository.class);
+        ClientRepository clientRepository = webApplicationContext.getBean(ClientRepository.class);
+        initialDataForIntegrationTests = new InitialDataForIntegrationTests(clientService, clientRepository, deliveryCreationService, deliveryRepository);
     }
 
     @Test
     void shouldReturnAllDeliveries() throws Exception {
-        var deliveryResponseDto = initialDataForTests.createDelivery(deliveryRequestDtoValid());
+        var deliveryResponseDto = initialDataForIntegrationTests.createDelivery(deliveryRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI)
@@ -58,12 +66,12 @@ class DeliveryControllerTest extends BaseIntegrationTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(deliveryResponseDto.getId()));
 
-        initialDataForTests.deleteDelivery();
+        initialDataForIntegrationTests.deleteDelivery();
     }
 
     @Test
     void shouldReturnDeliveryResponseDto_whenDeliveryIdFound() throws Exception {
-        var deliveryResponseDto = initialDataForTests.createDelivery(deliveryRequestDtoValid());
+        var deliveryResponseDto = initialDataForIntegrationTests.createDelivery(deliveryRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI + "/{deliveryId}", deliveryResponseDto.getId())
@@ -71,7 +79,7 @@ class DeliveryControllerTest extends BaseIntegrationTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(deliveryResponseDto.getId()));
 
-        initialDataForTests.deleteDelivery();
+        initialDataForIntegrationTests.deleteDelivery();
     }
 
     @Test
@@ -88,7 +96,7 @@ class DeliveryControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldSaveDeliveryAndReturnDeliveryResponse_whenDeliveryRequestDtoValidWasPassed() throws Exception {
-        var client = initialDataForTests.createClient(clientRequestDtoValid());
+        var client = initialDataForIntegrationTests.createClient(clientRequestDtoValid());
 
         DeliveryRequestDto deliveryRequestDto = deliveryRequestDtoValid();
         deliveryRequestDto.setClientId(client.getId());
@@ -100,7 +108,7 @@ class DeliveryControllerTest extends BaseIntegrationTest {
                 .andDo(print()).andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.recipientName").value(deliveryRequestDto.getRecipientName()));
 
-        initialDataForTests.deleteDelivery();
+        initialDataForIntegrationTests.deleteDelivery();
     }
 
     @Test
@@ -236,27 +244,55 @@ class DeliveryControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    void shouldCompleteDelivery_whenDeliveryIdWasFound() throws Exception {
-        var deliveryResponseDto = initialDataForTests.createDelivery(deliveryRequestDtoValid());
+    void shouldCompleteDeliveryAndSendEmail_whenDeliveryIdWasFound() throws Exception {
+        camelContext.start();
+
+        var deliveryResponseDto = initialDataForIntegrationTests.createDelivery(deliveryRequestDtoValid());
+
+        var deliveryEmailDto = DeliveryEmailDto.builder()
+                .clientEmail(deliveryResponseDto.getClientEmail())
+                .subject("Produto recebido com sucesso")
+                .body(String.format("O produto de %s foi recebido por %s", deliveryResponseDto.getClientName(), deliveryResponseDto.getRecipientName()))
+                .build();
+
+        deliverySendEmailMockEndpoint.reset();
+        deliverySendEmailMockEndpoint.expectedMessageCount(1);
+        deliverySendEmailMockEndpoint.expectedBodiesReceived(new ObjectMapper().writeValueAsString(deliveryEmailDto));
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.put(URI + "/{deliveryId}/complete", deliveryResponseDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isNoContent());
 
-        initialDataForTests.deleteDelivery();
+        deliverySendEmailMockEndpoint.assertIsSatisfied();
+
+        initialDataForIntegrationTests.deleteDelivery();
     }
 
     @Test
-    void shouldCancelDelivery_whenDeliveryIdWasFound() throws Exception {
-        var deliveryResponseDto = initialDataForTests.createDelivery(deliveryRequestDtoValid());
+    void shouldCancelDeliveryAndSendEmail_whenDeliveryIdWasFound() throws Exception {
+        camelContext.start();
+
+        var deliveryResponseDto = initialDataForIntegrationTests.createDelivery(deliveryRequestDtoValid());
+
+        var deliveryEmailDto = DeliveryEmailDto.builder()
+                .clientEmail(deliveryResponseDto.getClientEmail())
+                .subject("O envio do produto foi cancelado")
+                .body(String.format("O produto de %s não pode ser enviado", deliveryResponseDto.getClientName()))
+                .build();
+
+        deliverySendEmailMockEndpoint.reset();
+        deliverySendEmailMockEndpoint.expectedMessageCount(1);
+        deliverySendEmailMockEndpoint.expectedBodiesReceived(new ObjectMapper().writeValueAsString(deliveryEmailDto));
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.put(URI + "/{deliveryId}/cancel", deliveryResponseDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isNoContent());
 
-        initialDataForTests.deleteDelivery();
+        deliverySendEmailMockEndpoint.assertIsSatisfied();
+
+        initialDataForIntegrationTests.deleteDelivery();
     }
 
     @Test

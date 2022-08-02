@@ -21,37 +21,36 @@ import static com.neylandev.delivery.DataForTests.occurrenceRequestDtoValid;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class OccurrenceControllerTest extends BaseIntegrationTest {
+class OccurrenceControllerIntegrationTest extends BaseIntegrationTest {
 
     private final static String URI = "/deliveries/{deliveryId}/occurrences";
 
-    private OccurrenceService occurrenceService;
-    private InitialDataForTests initialDataForTests;
+    private InitialDataForIntegrationTests initialDataForIntegrationTests;
 
 
     @BeforeAll
     public void init() {
-        occurrenceService = webApplicationContext.getBean(OccurrenceService.class);
+        OccurrenceService occurrenceService = webApplicationContext.getBean(OccurrenceService.class);
         ClientService clientService = webApplicationContext.getBean(ClientService.class);
         DeliveryCreationService deliveryCreationService = webApplicationContext.getBean(DeliveryCreationService.class);
         OccurrenceRepository occurrenceRepository = webApplicationContext.getBean(OccurrenceRepository.class);
         DeliveryRepository deliveryRepository = webApplicationContext.getBean(DeliveryRepository.class);
         ClientRepository clientRepository = webApplicationContext.getBean(ClientRepository.class);
-        initialDataForTests = new InitialDataForTests(clientService, clientRepository, deliveryCreationService, deliveryRepository, occurrenceService, occurrenceRepository);
+        initialDataForIntegrationTests = new InitialDataForIntegrationTests(clientService, clientRepository, deliveryCreationService, deliveryRepository, occurrenceService, occurrenceRepository);
     }
 
     @Test
     void shouldReturnAllOccurrencesFromDelivery() throws Exception {
 
-        OccurrenceResponseDto occurrenceResponseDto = initialDataForTests.createOccurrence(occurrenceRequestDtoValid());
+        OccurrenceResponseDto occurrenceResponseDto = initialDataForIntegrationTests.createOccurrence(occurrenceRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI, occurrenceResponseDto.getDeliveryId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(occurrenceResponseDto.getDeliveryId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(occurrenceResponseDto.getId()));
 
-        initialDataForTests.deleteOccurrence();
+        initialDataForIntegrationTests.deleteOccurrence();
 
     }
 
@@ -69,7 +68,7 @@ class OccurrenceControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldRegisterOccurrenceAndReturnOccurrenceResponse_whenOccurrenceRequestDtoValidWasPassed() throws Exception {
-        var delivery = initialDataForTests.createDelivery(deliveryRequestDtoValid());
+        var delivery = initialDataForIntegrationTests.createDelivery(deliveryRequestDtoValid());
 
         OccurrenceRequestDto occurrenceRequestDto = occurrenceRequestDtoValid();
 
@@ -78,9 +77,9 @@ class OccurrenceControllerTest extends BaseIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(occurrenceRequestDto)))
                 .andDo(print()).andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(delivery.getId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value(occurrenceRequestDto.getDescription()));
 
-        initialDataForTests.deleteOccurrence();
+        initialDataForIntegrationTests.deleteOccurrence();
     }
 
     @Test

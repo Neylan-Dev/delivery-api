@@ -23,22 +23,22 @@ import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class ClientControllerTest extends BaseIntegrationTest {
+class ClientControllerIntegrationTest extends BaseIntegrationTest {
 
     private final static String URI = "/clients";
 
     private ClientService clientService;
-    private InitialDataForTests initialDataForTests;
+    private InitialDataForIntegrationTests initialDataForIntegrationTests;
 
     @BeforeAll
     public void init() {
         clientService = webApplicationContext.getBean(ClientService.class);
-        initialDataForTests = new InitialDataForTests(clientService);
+        initialDataForIntegrationTests = new InitialDataForIntegrationTests(clientService);
     }
 
     @Test
     void shouldReturnAllClients() throws Exception {
-        var clientResponseDto = initialDataForTests.createClient(clientRequestDtoValid());
+        var clientResponseDto = initialDataForIntegrationTests.createClient(clientRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI)
@@ -46,12 +46,12 @@ class ClientControllerTest extends BaseIntegrationTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(clientResponseDto.getId()));
 
-        initialDataForTests.deleteClient(clientResponseDto.getId());
+        initialDataForIntegrationTests.deleteClient(clientResponseDto.getId());
     }
 
     @Test
     void shouldReturnClientResponseDto_whenClientIdFound() throws Exception {
-        var clientResponseDto = initialDataForTests.createClient(clientRequestDtoValid());
+        var clientResponseDto = initialDataForIntegrationTests.createClient(clientRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get(URI + "/{clientId}", clientResponseDto.getId())
@@ -59,7 +59,7 @@ class ClientControllerTest extends BaseIntegrationTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(clientResponseDto.getId()));
 
-        initialDataForTests.deleteClient(clientResponseDto.getId());
+        initialDataForIntegrationTests.deleteClient(clientResponseDto.getId());
     }
 
     @Test
@@ -238,7 +238,7 @@ class ClientControllerTest extends BaseIntegrationTest {
     @Test
     void shouldUpdateClientAndReturnClientResponse_whenClientRequestDtoValidWasPassed() throws Exception {
 
-        var clientResponseDto = initialDataForTests.createClient(clientRequestDtoValid());
+        var clientResponseDto = initialDataForIntegrationTests.createClient(clientRequestDtoValid());
 
         ClientRequestDto clientRequestDto = clientRequestDtoValid();
 
@@ -415,7 +415,7 @@ class ClientControllerTest extends BaseIntegrationTest {
     @Test
     void shouldDeleteClient_whenClientIdWasFound() throws Exception {
 
-        var clientResponseDto = initialDataForTests.createClient(clientRequestDtoValid());
+        var clientResponseDto = initialDataForIntegrationTests.createClient(clientRequestDtoValid());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.delete(URI + "/{clientId}", clientResponseDto.getId())
