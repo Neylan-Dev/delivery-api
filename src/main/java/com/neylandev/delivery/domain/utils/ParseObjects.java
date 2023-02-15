@@ -1,10 +1,10 @@
 package com.neylandev.delivery.domain.utils;
 
 import com.neylandev.delivery.application.request.ClientRequestDto;
-import com.neylandev.delivery.application.request.DeliveryRequestDto;
+import com.neylandev.delivery.application.request.OrderRequestDto;
 import com.neylandev.delivery.application.response.ClientResponseDto;
-import com.neylandev.delivery.application.response.DeliveryResponseDto;
 import com.neylandev.delivery.application.response.OccurrenceResponseDto;
+import com.neylandev.delivery.application.response.OrderResponseDto;
 import com.neylandev.delivery.domain.model.Client;
 import com.neylandev.delivery.domain.model.Delivery;
 import com.neylandev.delivery.domain.model.Occurrence;
@@ -32,15 +32,15 @@ public class ParseObjects {
         return clients.stream().map(ParseObjects::clientToClientResponseDto).collect(Collectors.toList());
     }
 
-    public static DeliveryResponseDto deliveryToDeliveryResponseDto(Delivery delivery) {
-        return modelMapper.map(delivery, DeliveryResponseDto.class);
+    public static OrderResponseDto deliveryToDeliveryResponseDto(Delivery delivery) {
+        return modelMapper.map(delivery, OrderResponseDto.class);
     }
 
-    public static Delivery deliveryRequestDtoToDelivery(DeliveryRequestDto deliveryRequestDto) {
-        return modelMapper.map(deliveryRequestDto, Delivery.class);
+    public static Delivery deliveryRequestDtoToDelivery(OrderRequestDto orderRequestDto) {
+        return modelMapper.map(orderRequestDto, Delivery.class);
     }
 
-    public static List<DeliveryResponseDto> listDeliveryToListDeliveryResponseDto(List<Delivery> deliveries) {
+    public static List<OrderResponseDto> listDeliveryToListDeliveryResponseDto(List<Delivery> deliveries) {
         return deliveries.stream().map(ParseObjects::deliveryToDeliveryResponseDto).collect(Collectors.toList());
     }
 

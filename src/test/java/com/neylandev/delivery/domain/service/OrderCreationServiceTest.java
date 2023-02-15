@@ -4,7 +4,7 @@ import com.neylandev.delivery.domain.enums.DataForBusinessException;
 import com.neylandev.delivery.domain.enums.DeliveryStatus;
 import com.neylandev.delivery.domain.model.Delivery;
 import com.neylandev.delivery.domain.repository.ClientRepository;
-import com.neylandev.delivery.domain.repository.DeliveryRepository;
+import com.neylandev.delivery.domain.repository.OrderRepository;
 import com.neylandev.delivery.infrastructure.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,27 +16,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.neylandev.delivery.DataForTests.INVALID_CLIENT_ID;
-import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.VALID_CLIENT_ID;
-import static com.neylandev.delivery.DataForTests.clientValid;
-import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
-import static com.neylandev.delivery.DataForTests.deliveryValid;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.neylandev.delivery.DataForTests.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class DeliveryCreationServiceTest {
+class OrderCreationServiceTest {
 
     @InjectMocks
-    private DeliveryCreationService deliveryCreationService;
+    private OrderCreationService orderCreationService;
 
     @Mock
-    private DeliveryRepository deliveryRepository;
+    private OrderRepository orderRepository;
 
     @Mock
     private ClientRepository clientRepository;
@@ -53,11 +46,11 @@ class DeliveryCreationServiceTest {
         ArgumentCaptor<Delivery> deliveryArgumentCaptor = ArgumentCaptor.forClass(Delivery.class);
 
         when(clientRepository.findById(VALID_CLIENT_ID)).thenReturn(Optional.of(client));
-        when(deliveryRepository.save(any(Delivery.class))).thenReturn(deliveryValid());
+        when(orderRepository.save(any(Delivery.class))).thenReturn(deliveryValid());
 
-        var deliveryResponseDto = deliveryCreationService.save(deliveryRequestDto);
+        var deliveryResponseDto = orderCreationService.save(deliveryRequestDto);
 
-        verify(deliveryRepository).save(deliveryArgumentCaptor.capture());
+        verify(orderRepository).save(deliveryArgumentCaptor.capture());
         var deliveryArgumentCaptorValue = deliveryArgumentCaptor.getValue();
         assertEquals(client.getTelephone(), deliveryArgumentCaptorValue.getClient().getTelephone());
         assertNotNull(deliveryArgumentCaptorValue.getOrderedDate());
@@ -73,7 +66,7 @@ class DeliveryCreationServiceTest {
         when(clientRepository.findById(INVALID_CLIENT_ID)).thenReturn(Optional.empty());
 
         assertThrows(BusinessException.class,
-                () -> deliveryCreationService.save(deliveryRequestDto),
+                () -> orderCreationService.save(deliveryRequestDto),
                 DataForBusinessException.CLIENT_DELIVERY_NOT_FOUND.getMessage());
 
 
@@ -82,9 +75,9 @@ class DeliveryCreationServiceTest {
     @Test
     void shouldFindAllDeliveries() {
         var delivery = deliveryValid();
-        when(deliveryRepository.findAll()).thenReturn(Collections.singletonList(delivery));
+        when(orderRepository.findAll()).thenReturn(Collections.singletonList(delivery));
 
-        var deliveryResponseDtoList = deliveryCreationService.findAll();
+        var deliveryResponseDtoList = orderCreationService.findAll();
 
         assertEquals(delivery.getId(), deliveryResponseDtoList.stream().iterator().next().getId());
         assertEquals(delivery.getClient().getId(), deliveryResponseDtoList.stream().iterator().next().getClientId());
@@ -97,7 +90,7 @@ class DeliveryCreationServiceTest {
 
         when(findDeliveryService.find(delivery.getId())).thenReturn(delivery);
 
-        var deliveryResponseDtoList = deliveryCreationService.findById(delivery.getId());
+        var deliveryResponseDtoList = orderCreationService.findById(delivery.getId());
 
         assertEquals(delivery.getId(), deliveryResponseDtoList.getId());
         assertEquals(delivery.getClient().getId(), deliveryResponseDtoList.getClientId());
@@ -110,7 +103,7 @@ class DeliveryCreationServiceTest {
                 .thenThrow(DataForBusinessException.DELIVERY_NOT_FOUND
                         .asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID)));
 
-        assertThrows(BusinessException.class, () -> deliveryCreationService.findById(INVALID_DELIVERY_ID),
+        assertThrows(BusinessException.class, () -> orderCreationService.findById(INVALID_DELIVERY_ID),
                 DataForBusinessException.DELIVERY_NOT_FOUND.getMessage());
     }
 

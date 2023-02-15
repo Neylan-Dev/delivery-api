@@ -10,13 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.VALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.VALID_DESCRIPTION;
-import static com.neylandev.delivery.DataForTests.VALID_OCCURRENCE_ID;
-import static com.neylandev.delivery.DataForTests.deliveryValid;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static com.neylandev.delivery.DataForTests.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +35,7 @@ class OccurrenceServiceTest {
 
         var occurrenceResponseDto = occurrenceService.registerOccurrence(VALID_DELIVERY_ID, VALID_DESCRIPTION);
 
-        assertEquals(delivery.getId(), occurrenceResponseDto.getDeliveryId());
+        assertEquals(delivery.getId(), occurrenceResponseDto.getOrderId());
     }
 
     @Test
@@ -65,7 +59,7 @@ class OccurrenceServiceTest {
 
         var occurrenceResponseDtoList = occurrenceService.findAllOccurrencesOfDelivery(VALID_DELIVERY_ID);
 
-        assertEquals(delivery.getOccurrences().iterator().next().getId(), occurrenceResponseDtoList.iterator().next().getDeliveryId());
+        assertEquals(delivery.getOccurrences().iterator().next().getId(), occurrenceResponseDtoList.iterator().next().getOrderId());
         assertEquals(delivery.getOccurrences().iterator().next().getDescription(), occurrenceResponseDtoList.iterator().next().getDescription());
     }
 

@@ -1,14 +1,12 @@
 package com.neylandev.delivery;
 
 import com.neylandev.delivery.application.request.ClientRequestDto;
-import com.neylandev.delivery.application.request.DeliveryRequestDto;
 import com.neylandev.delivery.application.request.OccurrenceRequestDto;
+import com.neylandev.delivery.application.request.OrderRequestDto;
 import com.neylandev.delivery.application.response.ClientResponseDto;
-import com.neylandev.delivery.application.response.DeliveryResponseDto;
 import com.neylandev.delivery.application.response.OccurrenceResponseDto;
-import com.neylandev.delivery.domain.enums.DeliveryStatus;
+import com.neylandev.delivery.application.response.OrderResponseDto;
 import com.neylandev.delivery.domain.model.Client;
-import com.neylandev.delivery.domain.model.Delivery;
 import com.neylandev.delivery.domain.model.Occurrence;
 import com.neylandev.delivery.domain.model.Recipient;
 
@@ -90,8 +88,8 @@ public abstract class DataForTests{
         return delivery;
     }
 
-    public static DeliveryResponseDto deliveryResponseDtoValid() {
-        return DeliveryResponseDto.builder()
+    public static OrderResponseDto deliveryResponseDtoValid() {
+        return OrderResponseDto.builder()
                 .id(VALID_DELIVERY_ID)
                 .clientEmail(VALID_CLIENT_EMAIL)
                 .clientId(VALID_CLIENT_ID)
@@ -108,8 +106,8 @@ public abstract class DataForTests{
                 .build();
     }
 
-    public static DeliveryRequestDto deliveryRequestDtoValid() {
-        return DeliveryRequestDto.builder()
+    public static OrderRequestDto deliveryRequestDtoValid() {
+        return OrderRequestDto.builder()
                 .clientId(VALID_CLIENT_ID)
                 .recipientComplement(VALID_RECIPIENT_COMPLEMENT)
                 .recipientNeighborhood(VALID_RECIPIENT_NEIGHBORHOOD)
@@ -136,7 +134,7 @@ public abstract class DataForTests{
         return OccurrenceResponseDto.builder()
                 .description(VALID_DESCRIPTION)
                 .registerDate(NOW)
-                .deliveryId(VALID_DELIVERY_ID)
+                .orderId(VALID_DELIVERY_ID)
                 .id(VALID_OCCURRENCE_ID)
                 .build();
     }

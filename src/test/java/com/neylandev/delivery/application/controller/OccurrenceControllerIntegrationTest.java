@@ -4,20 +4,18 @@ import com.neylandev.delivery.application.request.OccurrenceRequestDto;
 import com.neylandev.delivery.application.response.OccurrenceResponseDto;
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
 import com.neylandev.delivery.domain.repository.ClientRepository;
-import com.neylandev.delivery.domain.repository.DeliveryRepository;
 import com.neylandev.delivery.domain.repository.OccurrenceRepository;
+import com.neylandev.delivery.domain.repository.OrderRepository;
 import com.neylandev.delivery.domain.service.ClientService;
-import com.neylandev.delivery.domain.service.DeliveryCreationService;
 import com.neylandev.delivery.domain.service.OccurrenceService;
+import com.neylandev.delivery.domain.service.OrderCreationService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
-import static com.neylandev.delivery.DataForTests.occurrenceRequestDtoValid;
+import static com.neylandev.delivery.DataForTests.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,11 +30,11 @@ class OccurrenceControllerIntegrationTest extends BaseIntegrationTest {
     public void init() {
         OccurrenceService occurrenceService = webApplicationContext.getBean(OccurrenceService.class);
         ClientService clientService = webApplicationContext.getBean(ClientService.class);
-        DeliveryCreationService deliveryCreationService = webApplicationContext.getBean(DeliveryCreationService.class);
+        OrderCreationService orderCreationService = webApplicationContext.getBean(OrderCreationService.class);
         OccurrenceRepository occurrenceRepository = webApplicationContext.getBean(OccurrenceRepository.class);
-        DeliveryRepository deliveryRepository = webApplicationContext.getBean(DeliveryRepository.class);
+        OrderRepository orderRepository = webApplicationContext.getBean(OrderRepository.class);
         ClientRepository clientRepository = webApplicationContext.getBean(ClientRepository.class);
-        initialDataForIntegrationTests = new InitialDataForIntegrationTests(clientService, clientRepository, deliveryCreationService, deliveryRepository, occurrenceService, occurrenceRepository);
+        initialDataForIntegrationTests = new InitialDataForIntegrationTests(clientService, clientRepository, orderCreationService, orderRepository, occurrenceService, occurrenceRepository);
     }
 
     @Test
@@ -45,7 +43,7 @@ class OccurrenceControllerIntegrationTest extends BaseIntegrationTest {
         OccurrenceResponseDto occurrenceResponseDto = initialDataForIntegrationTests.createOccurrence(occurrenceRequestDtoValid());
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get(URI, occurrenceResponseDto.getDeliveryId())
+                .perform(MockMvcRequestBuilders.get(URI, occurrenceResponseDto.getOrderId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(occurrenceResponseDto.getId()));

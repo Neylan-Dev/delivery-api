@@ -4,11 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
-import static com.neylandev.delivery.DataForTests.clientValid;
-import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
-import static com.neylandev.delivery.DataForTests.deliveryValid;
-import static com.neylandev.delivery.DataForTests.occurrenceValid;
+import static com.neylandev.delivery.DataForTests.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ParseObjectsTest {
@@ -102,7 +98,7 @@ class ParseObjectsTest {
         assertEquals(occurrence.getId(), deliveryResponseDto.getId());
         assertEquals(occurrence.getDescription(), deliveryResponseDto.getDescription());
         assertEquals(occurrence.getRegisterDate(), deliveryResponseDto.getRegisterDate());
-        assertEquals(occurrence.getDelivery().getId(), deliveryResponseDto.getDeliveryId());
+        assertEquals(occurrence.getDelivery().getId(), deliveryResponseDto.getOrderId());
     }
 
     @Test
@@ -112,6 +108,6 @@ class ParseObjectsTest {
         assertEquals(occurrence.getId(), deliveryResponseDtoList.iterator().next().getId());
         assertEquals(occurrence.getDescription(), deliveryResponseDtoList.iterator().next().getDescription());
         assertEquals(occurrence.getRegisterDate(), deliveryResponseDtoList.iterator().next().getRegisterDate());
-        assertEquals(occurrence.getDelivery().getId(), deliveryResponseDtoList.iterator().next().getDeliveryId());
+        assertEquals(occurrence.getDelivery().getId(), deliveryResponseDtoList.iterator().next().getOrderId());
     }
 }

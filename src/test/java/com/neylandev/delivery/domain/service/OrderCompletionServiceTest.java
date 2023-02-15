@@ -3,7 +3,7 @@ package com.neylandev.delivery.domain.service;
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
 import com.neylandev.delivery.domain.enums.DeliveryStatus;
 import com.neylandev.delivery.domain.model.Delivery;
-import com.neylandev.delivery.domain.repository.DeliveryRepository;
+import com.neylandev.delivery.domain.repository.OrderRepository;
 import com.neylandev.delivery.infrastructure.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,20 +15,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
 import static com.neylandev.delivery.DataForTests.deliveryValid;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class DeliveryCompletionServiceTest {
+class OrderCompletionServiceTest {
 
     @InjectMocks
-    private DeliveryCompletionService deliveryCompletionService;
+    private OrderCompletionService orderCompletionService;
 
     @Mock
-    private DeliveryRepository deliveryRepository;
+    private OrderRepository orderRepository;
 
     @Mock
     private FindDeliveryService findDeliveryService;
@@ -40,9 +36,9 @@ class DeliveryCompletionServiceTest {
         when(findDeliveryService.find(delivery.getId())).thenReturn(delivery);
 
         ArgumentCaptor<Delivery> deliveryArgumentCaptor = ArgumentCaptor.forClass(Delivery.class);
-        assertDoesNotThrow(() -> deliveryCompletionService.complete(delivery.getId()));
+        assertDoesNotThrow(() -> orderCompletionService.complete(delivery.getId()));
 
-        verify(deliveryRepository, atLeastOnce()).save(deliveryArgumentCaptor.capture());
+        verify(orderRepository, atLeastOnce()).save(deliveryArgumentCaptor.capture());
         var value = deliveryArgumentCaptor.getValue();
         assertEquals(DeliveryStatus.FINALIZED, value.getDeliveryStatus());
     }
@@ -53,7 +49,7 @@ class DeliveryCompletionServiceTest {
                 .thenThrow(DataForBusinessException.DELIVERY_NOT_FOUND
                         .asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID)));
 
-        assertThrows(BusinessException.class, () -> deliveryCompletionService.complete(INVALID_DELIVERY_ID),
+        assertThrows(BusinessException.class, () -> orderCompletionService.complete(INVALID_DELIVERY_ID),
                 DataForBusinessException.DELIVERY_NOT_FOUND.getMessage());
     }
 
@@ -64,9 +60,9 @@ class DeliveryCompletionServiceTest {
         when(findDeliveryService.find(delivery.getId())).thenReturn(delivery);
 
         ArgumentCaptor<Delivery> deliveryArgumentCaptor = ArgumentCaptor.forClass(Delivery.class);
-        assertDoesNotThrow(() -> deliveryCompletionService.cancel(delivery.getId()));
+        assertDoesNotThrow(() -> orderCompletionService.cancel(delivery.getId()));
 
-        verify(deliveryRepository, atLeastOnce()).save(deliveryArgumentCaptor.capture());
+        verify(orderRepository, atLeastOnce()).save(deliveryArgumentCaptor.capture());
         var value = deliveryArgumentCaptor.getValue();
         assertEquals(DeliveryStatus.CANCELLED, value.getDeliveryStatus());
     }
@@ -77,7 +73,7 @@ class DeliveryCompletionServiceTest {
                 .thenThrow(DataForBusinessException.DELIVERY_NOT_FOUND
                         .asBusinessExceptionWithDescriptionFormatted(Long.toString(INVALID_DELIVERY_ID)));
 
-        assertThrows(BusinessException.class, () -> deliveryCompletionService.cancel(INVALID_DELIVERY_ID),
+        assertThrows(BusinessException.class, () -> orderCompletionService.cancel(INVALID_DELIVERY_ID),
                 DataForBusinessException.DELIVERY_NOT_FOUND.getMessage());
     }
 

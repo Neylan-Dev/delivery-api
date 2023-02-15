@@ -1,13 +1,13 @@
 package com.neylandev.delivery.application.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.neylandev.delivery.application.request.DeliveryRequestDto;
+import com.neylandev.delivery.application.request.OrderRequestDto;
 import com.neylandev.delivery.domain.dto.DeliveryEmailDto;
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
 import com.neylandev.delivery.domain.repository.ClientRepository;
-import com.neylandev.delivery.domain.repository.DeliveryRepository;
+import com.neylandev.delivery.domain.repository.OrderRepository;
 import com.neylandev.delivery.domain.service.ClientService;
-import com.neylandev.delivery.domain.service.DeliveryCreationService;
+import com.neylandev.delivery.domain.service.OrderCreationService;
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -20,22 +20,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static com.neylandev.delivery.DataForTests.INVALID_DELIVERY_ID;
-import static com.neylandev.delivery.DataForTests.VALID_CLIENT_ID;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_COMPLEMENT;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_NAME;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_NEIGHBORHOOD;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_NUMBER;
-import static com.neylandev.delivery.DataForTests.VALID_RECIPIENT_STREET;
-import static com.neylandev.delivery.DataForTests.VALID_TAX;
-import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
-import static com.neylandev.delivery.DataForTests.deliveryRequestDtoValid;
+import static com.neylandev.delivery.DataForTests.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @MockEndpoints
 @UseAdviceWith
-class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
+class OrderControllerIntegrationTest extends BaseIntegrationTest {
 
     private final static String URI = "/deliveries";
 
@@ -50,10 +41,10 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
     @BeforeAll
     public void init() {
         ClientService clientService = webApplicationContext.getBean(ClientService.class);
-        DeliveryCreationService deliveryCreationService = webApplicationContext.getBean(DeliveryCreationService.class);
-        DeliveryRepository deliveryRepository = webApplicationContext.getBean(DeliveryRepository.class);
+        OrderCreationService orderCreationService = webApplicationContext.getBean(OrderCreationService.class);
+        OrderRepository orderRepository = webApplicationContext.getBean(OrderRepository.class);
         ClientRepository clientRepository = webApplicationContext.getBean(ClientRepository.class);
-        initialDataForIntegrationTests = new InitialDataForIntegrationTests(clientService, clientRepository, deliveryCreationService, deliveryRepository);
+        initialDataForIntegrationTests = new InitialDataForIntegrationTests(clientService, clientRepository, orderCreationService, orderRepository);
     }
 
     @Test
@@ -98,15 +89,15 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
     void shouldSaveDeliveryAndReturnDeliveryResponse_whenDeliveryRequestDtoValidWasPassed() throws Exception {
         var client = initialDataForIntegrationTests.createClient(clientRequestDtoValid());
 
-        DeliveryRequestDto deliveryRequestDto = deliveryRequestDtoValid();
-        deliveryRequestDto.setClientId(client.getId());
+        OrderRequestDto orderRequestDto = deliveryRequestDtoValid();
+        orderRequestDto.setClientId(client.getId());
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(deliveryRequestDto)))
+                        .content(objectMapper.writeValueAsBytes(orderRequestDto)))
                 .andDo(print()).andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.recipientName").value(deliveryRequestDto.getRecipientName()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.recipientName").value(orderRequestDto.getRecipientName()));
 
         initialDataForIntegrationTests.deleteDelivery();
     }
@@ -114,7 +105,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldThrowBusinessException_whenDeliveryRequestDtoWithRecipientNameNullWasPassedAndSaveWasCalled() throws Exception {
 
-        DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
+        OrderRequestDto orderRequestDto = OrderRequestDto.builder()
                 .clientId(VALID_CLIENT_ID)
                 .recipientComplement(VALID_RECIPIENT_COMPLEMENT)
                 .recipientNeighborhood(VALID_RECIPIENT_NEIGHBORHOOD)
@@ -126,7 +117,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(deliveryRequestDto)))
+                        .content(objectMapper.writeValueAsBytes(orderRequestDto)))
                 .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(DataForBusinessException.INVALID_INPUT.getMessage()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("[recipientName:O campo recipientName não pode ser nulo]"));
@@ -136,7 +127,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldThrowBusinessException_whenDeliveryRequestDtoWithRecipientNeighborhoodNullWasPassedAndSaveWasCalled() throws Exception {
 
-        DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
+        OrderRequestDto orderRequestDto = OrderRequestDto.builder()
                 .clientId(VALID_CLIENT_ID)
                 .recipientComplement(VALID_RECIPIENT_COMPLEMENT)
                 .recipientName(VALID_RECIPIENT_NAME)
@@ -148,7 +139,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(deliveryRequestDto)))
+                        .content(objectMapper.writeValueAsBytes(orderRequestDto)))
                 .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(DataForBusinessException.INVALID_INPUT.getMessage()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("[recipientNeighborhood:O campo recipientNeighborhood não pode ser nulo]"));
@@ -158,7 +149,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldThrowBusinessException_whenDeliveryRequestDtoWithRecipientNumberNullWasPassedAndSaveWasCalled() throws Exception {
 
-        DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
+        OrderRequestDto orderRequestDto = OrderRequestDto.builder()
                 .clientId(VALID_CLIENT_ID)
                 .recipientComplement(VALID_RECIPIENT_COMPLEMENT)
                 .recipientName(VALID_RECIPIENT_NAME)
@@ -170,7 +161,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(deliveryRequestDto)))
+                        .content(objectMapper.writeValueAsBytes(orderRequestDto)))
                 .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(DataForBusinessException.INVALID_INPUT.getMessage()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("[recipientNumber:O campo recipientNumber não pode ser nulo]"));
@@ -180,7 +171,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldThrowBusinessException_whenDeliveryRequestDtoWithRecipientNeighborStreetNullWasPassedAndSaveWasCalled() throws Exception {
 
-        DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
+        OrderRequestDto orderRequestDto = OrderRequestDto.builder()
                 .clientId(VALID_CLIENT_ID)
                 .recipientComplement(VALID_RECIPIENT_COMPLEMENT)
                 .recipientName(VALID_RECIPIENT_NAME)
@@ -192,7 +183,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(deliveryRequestDto)))
+                        .content(objectMapper.writeValueAsBytes(orderRequestDto)))
                 .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(DataForBusinessException.INVALID_INPUT.getMessage()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("[recipientStreet:O campo recipientStreet não pode ser nulo]"));
@@ -202,7 +193,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldThrowBusinessException_whenDeliveryRequestDtoWithTaxNullWasPassedAndSaveWasCalled() throws Exception {
 
-        DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
+        OrderRequestDto orderRequestDto = OrderRequestDto.builder()
                 .clientId(VALID_CLIENT_ID)
                 .recipientComplement(VALID_RECIPIENT_COMPLEMENT)
                 .recipientName(VALID_RECIPIENT_NAME)
@@ -214,7 +205,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(deliveryRequestDto)))
+                        .content(objectMapper.writeValueAsBytes(orderRequestDto)))
                 .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(DataForBusinessException.INVALID_INPUT.getMessage()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("[tax:O campo tax não pode ser nulo]"));
@@ -224,7 +215,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldThrowBusinessException_whenDeliveryRequestDtoWithClientIdNullWasPassedAndSaveWasCalled() throws Exception {
 
-        DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
+        OrderRequestDto orderRequestDto = OrderRequestDto.builder()
                 .recipientComplement(VALID_RECIPIENT_COMPLEMENT)
                 .recipientName(VALID_RECIPIENT_NAME)
                 .recipientNeighborhood(VALID_RECIPIENT_NEIGHBORHOOD)
@@ -236,7 +227,7 @@ class DeliveryControllerIntegrationTest extends BaseIntegrationTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(deliveryRequestDto)))
+                        .content(objectMapper.writeValueAsBytes(orderRequestDto)))
                 .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(DataForBusinessException.INVALID_INPUT.getMessage()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("[clientId:O campo clientId não pode ser nulo]"));

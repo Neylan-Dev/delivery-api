@@ -1,22 +1,20 @@
 package com.neylandev.delivery.application.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeliveryRequestDto {
+public class OrderRequestDto {
 
     @NotNull(message = "O campo clientId não pode ser nulo")
     @ApiModelProperty(value = "Id do cliente", name = "clientId", dataType = "Long", example = "1")
@@ -35,7 +33,11 @@ public class DeliveryRequestDto {
     @NotBlank(message = "O campo recipientNeighborhood não pode ser nulo")
     @ApiModelProperty(value = "Bairro do destinatário", name = "recipientNeighborhood", dataType = "String", example = "Centro")
     private String recipientNeighborhood;
-    @NotNull(message = "O campo tax não pode ser nulo")
-    @ApiModelProperty(value = "Taxa de entrega", name = "tax", dataType = "BigDecimal", example = "20.0")
-    private BigDecimal tax;
+    @NotNull(message = "O campo shipping não pode ser nulo")
+    @ApiModelProperty(value = "Taxa de envio", name = "shipping", dataType = "BigDecimal", example = "20.0")
+    private BigDecimal shipping;
+    @NotNull(message = "O campo orderItemRequestDtos não pode ser nulo")
+    @NotEmpty(message = "A lista orderItemRequestDtos não pode ser vazia")
+    @ApiModelProperty(value = "Lista de itens", name = "orderItemRequestDtos", dataType = "List", example = "[{\"productRequestDto\": {\"id\":1}, \"quantity\": 3}]")
+    private List<OrderItemRequestDto> orderItemRequestDtos;
 }

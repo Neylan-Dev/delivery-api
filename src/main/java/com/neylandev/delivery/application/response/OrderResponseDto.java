@@ -1,16 +1,13 @@
 package com.neylandev.delivery.application.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.neylandev.delivery.domain.enums.DeliveryStatus;
+import com.neylandev.delivery.domain.enums.OrderStatus;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +15,7 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeliveryResponseDto {
+public class OrderResponseDto {
 
     @ApiModelProperty(value = "Id da entrega", name = "id", dataType = "Long", example = "1")
     private Long id;
@@ -40,12 +37,20 @@ public class DeliveryResponseDto {
     private String recipientComplement;
     @ApiModelProperty(value = "Bairro do destinatário", name = "recipientNeighborhood", dataType = "String", example = "Centro")
     private String recipientNeighborhood;
-    @ApiModelProperty(value = "Taxa de entrega", name = "tax", dataType = "BigDecimal", example = "20.0")
-    private BigDecimal tax;
-    @ApiModelProperty(value = "Status da entrega", name = "deliveryStatus", dataType = "DeliveryStatus", example = "PENDING")
-    private DeliveryStatus deliveryStatus;
+    @ApiModelProperty(value = "Lista de itens", name = "orderItemResponseDtos", dataType = "List", example = "[{\"id\":1, \"productResponseDto\": {\"id\":1, \"name\":\"Caderno 20 Materias\", \"description\":\"Material escolar\", \"price\":20.0, \"category\":\"BOOKS\"}, \"quantity\":3, \"subtotal\":60.0}]")
+    private List<OrderItemResponseDto> orderItemResponseDtos;
+    @ApiModelProperty(value = "Soma de todos os subtotais do orderItemResponseDtos", name = "subtotal", dataType = "BigDecimal", example = "20.0")
+    private BigDecimal subtotal;
+    @ApiModelProperty(value = "Valor de envio", name = "shipping", dataType = "BigDecimal", example = "20.0")
+    private BigDecimal shipping;
+    @ApiModelProperty(value = "Valor total do pedido", name = "total", dataType = "BigDecimal", example = "20.0")
+    private BigDecimal total;
+    @ApiModelProperty(value = "Status do pedido", name = "orderStatus", dataType = "OrderStatus", example = "PENDING")
+    private OrderStatus orderStatus;
     @ApiModelProperty(value = "Data do pedido", name = "orderedDate", dataType = "OffsetDateTime", example = "2022-07-28T11:00:03.831798-03:00")
     private OffsetDateTime orderedDate;
     @ApiModelProperty(value = "Data da finalização ou cancelamento", name = "endDate", dataType = "OffsetDateTime", example = "2022-07-28T11:00:03.831798-03:00")
     private OffsetDateTime endDate;
+    @ApiModelProperty(value = "Lista de ocorrencias", name = "occurrenceResponseDtos", dataType = "List", example = "[{\"id\":1, \"orderId\":1, \"description\":\"Destinatario não estava na residência\", \"registerDate\":\"2022-07-28T11:00:03.831798-03:00\"}]")
+    private List<OccurrenceResponseDto> occurrenceResponseDtos;
 }

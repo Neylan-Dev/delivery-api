@@ -9,17 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static com.neylandev.delivery.DataForTests.INVALID_CLIENT_ID;
-import static com.neylandev.delivery.DataForTests.INVALID_EMAIL;
-import static com.neylandev.delivery.DataForTests.INVALID_NAME_WITH_FOUR_EQUALS_CHARACTERS_IN_SEQUENCE;
-import static com.neylandev.delivery.DataForTests.INVALID_NAME_WITH_SPECIAL_CHARACTERS;
-import static com.neylandev.delivery.DataForTests.INVALID_SIZE_NAME;
-import static com.neylandev.delivery.DataForTests.INVALID_TELEPHONE;
-import static com.neylandev.delivery.DataForTests.VALID_CLIENT_ID;
-import static com.neylandev.delivery.DataForTests.VALID_EMAIL;
-import static com.neylandev.delivery.DataForTests.VALID_NAME;
-import static com.neylandev.delivery.DataForTests.VALID_TELEPHONE;
-import static com.neylandev.delivery.DataForTests.clientRequestDtoValid;
+import static com.neylandev.delivery.DataForTests.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

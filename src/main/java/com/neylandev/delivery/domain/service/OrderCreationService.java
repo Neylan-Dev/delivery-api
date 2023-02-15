@@ -1,12 +1,12 @@
 package com.neylandev.delivery.domain.service;
 
-import com.neylandev.delivery.application.request.DeliveryRequestDto;
-import com.neylandev.delivery.application.response.DeliveryResponseDto;
+import com.neylandev.delivery.application.request.OrderRequestDto;
+import com.neylandev.delivery.application.response.OrderResponseDto;
 import com.neylandev.delivery.domain.enums.DataForBusinessException;
 import com.neylandev.delivery.domain.enums.DeliveryStatus;
 import com.neylandev.delivery.domain.model.Client;
 import com.neylandev.delivery.domain.repository.ClientRepository;
-import com.neylandev.delivery.domain.repository.DeliveryRepository;
+import com.neylandev.delivery.domain.repository.OrderRepository;
 import com.neylandev.delivery.domain.utils.ParseObjects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,20 +17,20 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DeliveryCreationService {
+public class OrderCreationService {
 
-    private final DeliveryRepository deliveryRepository;
+    private final OrderRepository orderRepository;
     private final ClientRepository clientRepository;
     private final FindDeliveryService findDeliveryService;
 
     @Transactional
-    public DeliveryResponseDto save(DeliveryRequestDto deliveryRequestDto) {
-        Client client = findClientById(deliveryRequestDto.getClientId());
-        var delivery = ParseObjects.deliveryRequestDtoToDelivery(deliveryRequestDto);
+    public OrderResponseDto save(OrderRequestDto orderRequestDto) {
+        Client client = findClientById(orderRequestDto.getClientId());
+        var delivery = ParseObjects.deliveryRequestDtoToDelivery(orderRequestDto);
         delivery.setDeliveryStatus(DeliveryStatus.PENDING);
         delivery.setOrderedDate(OffsetDateTime.now());
         delivery.setClient(client);
-        return ParseObjects.deliveryToDeliveryResponseDto(deliveryRepository.save(delivery));
+        return ParseObjects.deliveryToDeliveryResponseDto(orderRepository.save(delivery));
     }
 
     private Client findClientById(Long clientId) {
@@ -39,11 +39,11 @@ public class DeliveryCreationService {
                         .asBusinessExceptionWithDescriptionFormatted(Long.toString(clientId)));
     }
 
-    public List<DeliveryResponseDto> findAll() {
-        return ParseObjects.listDeliveryToListDeliveryResponseDto(deliveryRepository.findAll());
+    public List<OrderResponseDto> findAll() {
+        return ParseObjects.listDeliveryToListDeliveryResponseDto(orderRepository.findAll());
     }
 
-    public DeliveryResponseDto findById(Long deliveryId) {
+    public OrderResponseDto findById(Long deliveryId) {
         return ParseObjects.deliveryToDeliveryResponseDto(findDeliveryService.find(deliveryId));
     }
 }
