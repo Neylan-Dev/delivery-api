@@ -37,7 +37,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.save(productRequestDto), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Retorna todos os produtos cadastradas", response = ProductResponseDto.class, responseContainer = "List")
+    @ApiOperation(value = "Retorna todos os produtos cadastrados", response = ProductResponseDto.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Retornando lista de produtos"),
             @ApiResponse(code = 401, message = "Ausência de autorização"),
@@ -47,6 +47,18 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductResponseDto>> listAll() {
         return ResponseEntity.ok(productService.findAll());
+    }
+
+    @ApiOperation(value = "Retorna todos os produtos que tem em estoque", response = ProductResponseDto.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retornando lista de produtos"),
+            @ApiResponse(code = 401, message = "Ausência de autorização"),
+            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar busca de produtos"),
+            @ApiResponse(code = 500, message = "Sistema indisponível")
+    })
+    @GetMapping("/stock")
+    public ResponseEntity<List<ProductResponseDto>> listAllInStock() {
+        return ResponseEntity.ok(productService.findProductsThatStockGreaterThanZero());
     }
 
     @ApiOperation(value = "Busca um produto por id", response = ProductResponseDto.class)

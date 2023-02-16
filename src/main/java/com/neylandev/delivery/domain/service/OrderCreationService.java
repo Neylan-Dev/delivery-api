@@ -26,11 +26,11 @@ public class OrderCreationService {
     @Transactional
     public OrderResponseDto save(OrderRequestDto orderRequestDto) {
         Client client = findClientById(orderRequestDto.getClientId());
-        var delivery = ParseObjects.deliveryRequestDtoToDelivery(orderRequestDto);
+        var delivery = ParseObjects.orderRequestDtoToOrder(orderRequestDto);
         delivery.setDeliveryStatus(DeliveryStatus.PENDING);
         delivery.setOrderedDate(OffsetDateTime.now());
         delivery.setClient(client);
-        return ParseObjects.deliveryToDeliveryResponseDto(orderRepository.save(delivery));
+        return ParseObjects.orderToOrderResponseDto(orderRepository.save(delivery));
     }
 
     private Client findClientById(Long clientId) {
@@ -40,10 +40,10 @@ public class OrderCreationService {
     }
 
     public List<OrderResponseDto> findAll() {
-        return ParseObjects.listDeliveryToListDeliveryResponseDto(orderRepository.findAll());
+        return ParseObjects.listOrderToListOrderResponseDto(orderRepository.findAll());
     }
 
     public OrderResponseDto findById(Long deliveryId) {
-        return ParseObjects.deliveryToDeliveryResponseDto(findDeliveryService.find(deliveryId));
+        return ParseObjects.orderToOrderResponseDto(findDeliveryService.find(deliveryId));
     }
 }

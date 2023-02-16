@@ -41,7 +41,7 @@ class ParseObjectsTest {
     @Test
     void deliveryToDeliveryResponseDto() {
         var delivery = deliveryValid();
-        var deliveryResponseDto = ParseObjects.deliveryToDeliveryResponseDto(delivery);
+        var deliveryResponseDto = ParseObjects.orderToOrderResponseDto(delivery);
         assertEquals(delivery.getId(), deliveryResponseDto.getId());
         assertEquals(delivery.getClient().getName(), deliveryResponseDto.getClientName());
         assertEquals(delivery.getClient().getEmail(), deliveryResponseDto.getClientEmail());
@@ -61,7 +61,7 @@ class ParseObjectsTest {
     @Test
     void deliveryRequestDtoToDelivery() {
         var deliveryRequest = deliveryRequestDtoValid();
-        var delivery = ParseObjects.deliveryRequestDtoToDelivery(deliveryRequest);
+        var delivery = ParseObjects.orderRequestDtoToOrder(deliveryRequest);
         assertEquals(deliveryRequest.getClientId(), delivery.getClient().getId());
         assertEquals(deliveryRequest.getRecipientName(), delivery.getRecipient().getName());
         assertEquals(deliveryRequest.getRecipientComplement(), delivery.getRecipient().getComplement());
@@ -74,7 +74,7 @@ class ParseObjectsTest {
     @Test
     void listDeliveryToListDeliveryResponseDto() {
         var delivery = deliveryValid();
-        var deliveryResponseDtoList = ParseObjects.listDeliveryToListDeliveryResponseDto(Collections.singletonList(delivery));
+        var deliveryResponseDtoList = ParseObjects.listOrderToListOrderResponseDto(Collections.singletonList(delivery));
         assertEquals(delivery.getId(), deliveryResponseDtoList.iterator().next().getId());
         assertEquals(delivery.getClient().getName(), deliveryResponseDtoList.iterator().next().getClientName());
         assertEquals(delivery.getClient().getEmail(), deliveryResponseDtoList.iterator().next().getClientEmail());
