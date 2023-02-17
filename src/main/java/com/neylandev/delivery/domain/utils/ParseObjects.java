@@ -1,8 +1,6 @@
 package com.neylandev.delivery.domain.utils;
 
-import com.neylandev.delivery.application.request.ClientRequestDto;
-import com.neylandev.delivery.application.request.OrderRequestDto;
-import com.neylandev.delivery.application.request.ProductRequestDto;
+import com.neylandev.delivery.application.request.*;
 import com.neylandev.delivery.application.response.*;
 import com.neylandev.delivery.domain.model.*;
 import lombok.AccessLevel;
@@ -34,7 +32,11 @@ public class ParseObjects {
     }
 
     public static OrderResponseDto orderToOrderResponseDto(Order order) {
-        return modelMapper.map(order, OrderResponseDto.class);
+        OrderResponseDto orderResponseDto = modelMapper.map(order, OrderResponseDto.class);
+        orderResponseDto.setOrderItemResponseDtos(listOrderItemToListOrderItemResponseDto(order.getOrderItems()));
+        orderResponseDto.setOccurrenceResponseDtos(listOccurrenceToListOccurrenceResponseDto(order.getOccurrences()));
+        orderResponseDto.setPaymentResponseDtos(listPaymentToListPaymentResponseDto(order.getPayments()));
+        return orderResponseDto;
     }
 
     public static ProductResponseDto productToProductResponseDto(Product product) {
@@ -46,7 +48,9 @@ public class ParseObjects {
     }
 
     public static StockResponseDto stockToStockResponseDto(Stock stock) {
-        return modelMapper.map(stock, StockResponseDto.class);
+        StockResponseDto stockResponseDto = modelMapper.map(stock, StockResponseDto.class);
+        stockResponseDto.setProductResponseDto(productToProductResponseDto(stock.getProduct()));
+        return stockResponseDto;
     }
 
     public static List<StockResponseDto> listStockToListStockResponseDto(List<Stock> stocks) {
@@ -57,8 +61,38 @@ public class ParseObjects {
         return modelMapper.map(orderRequestDto, Order.class);
     }
 
+    public static Client clientResponseDtoToClient(ClientResponseDto clientResponseDto) {
+        return modelMapper.map(clientResponseDto, Client.class);
+    }
+
+    public static Payment paymentRequestDtoToPayment(PaymentRequestDto paymentRequestDto) {
+        return modelMapper.map(paymentRequestDto, Payment.class);
+    }
+
+    public static OrderItem orderItemRequestDtoToOrderItem(OrderItemRequestDto orderItemRequestDto) {
+        return modelMapper.map(orderItemRequestDto, OrderItem.class);
+    }
+
+    public static OrderItemResponseDto orderItemToOrderItemResponseDto(OrderItem orderItem) {
+        OrderItemResponseDto orderItemResponseDto = modelMapper.map(orderItem, OrderItemResponseDto.class);
+        orderItemResponseDto.setProductResponseDto(productToProductResponseDto(orderItem.getProduct()));
+        return orderItemResponseDto;
+    }
+
+    public static PaymentResponseDto paymentToPaymentResponseDto(Payment payment) {
+        return modelMapper.map(payment, PaymentResponseDto.class);
+    }
+
     public static List<OrderResponseDto> listOrderToListOrderResponseDto(List<Order> orders) {
         return orders.stream().map(ParseObjects::orderToOrderResponseDto).collect(Collectors.toList());
+    }
+    
+    public static List<OrderItemResponseDto> listOrderItemToListOrderItemResponseDto(List<OrderItem> orderItems) {
+        return orderItems.stream().map(ParseObjects::orderItemToOrderItemResponseDto).collect(Collectors.toList());
+    }
+
+    public static List<PaymentResponseDto> listPaymentToListPaymentResponseDto(List<Payment> payments) {
+        return payments.stream().map(ParseObjects::paymentToPaymentResponseDto).collect(Collectors.toList());
     }
 
     public static OccurrenceResponseDto occurrenceToOccurrenceResponseDto(Occurrence occurrence) {

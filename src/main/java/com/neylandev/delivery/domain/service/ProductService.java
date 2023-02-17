@@ -8,6 +8,7 @@ import com.neylandev.delivery.domain.repository.ProductRepository;
 import com.neylandev.delivery.domain.utils.ParseObjects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +21,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final StockService stockService;
 
+    @Transactional
     public ProductResponseDto save(ProductRequestDto productRequestDto) {
 
         this.validate(productRequestDto);
@@ -32,9 +34,11 @@ public class ProductService {
 
         Product product = ParseObjects.productRequestDtoToProduct(productRequestDto);
 
+        product = productRepository.save(product);
+
         stockService.saveStock(product);
 
-        return ParseObjects.productToProductResponseDto(productRepository.save(product));
+        return ParseObjects.productToProductResponseDto(product);
     }
 
 

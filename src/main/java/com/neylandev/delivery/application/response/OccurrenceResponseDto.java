@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,6 +20,6 @@ public class OccurrenceResponseDto {
     private String description;
     @ApiModelProperty(value = "Id do produto", name = "id", dataType = "Long", example = "1")
     private Long orderId;
-    @ApiModelProperty(value = "Data do ocorrência", name = "registerDate", dataType = "OffsetDateTime", example = "2022-07-28T11:00:03.831798-03:00")
-    private OffsetDateTime registerDate;
+    @ApiModelProperty(value = "Data do ocorrência", name = "registerDate", dataType = "LocalDateTime", example = "2022-07-28T11:00:03.831798-03:00")
+    private LocalDateTime registerDate;
 }

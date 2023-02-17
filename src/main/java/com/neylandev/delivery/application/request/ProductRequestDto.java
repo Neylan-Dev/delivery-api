@@ -20,7 +20,7 @@ public class ProductRequestDto {
     @ApiModelProperty(value = "Preço do produto", name = "price", dataType = "BigDecimal", example = "20.0")
     private BigDecimal price;
     @ApiModelProperty(value = "Descrição do produto", name = "description", dataType = "String", example = "Material Escolar")
-    private BigDecimal description;
+    private String description;
     @ApiModelProperty(value = "Categoria do produto", name = "category", dataType = "String", example = "BOOKS")
     private Category category;
 }

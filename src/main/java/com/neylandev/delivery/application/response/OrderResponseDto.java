@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -45,12 +45,14 @@ public class OrderResponseDto {
     private BigDecimal shipping;
     @ApiModelProperty(value = "Valor total do pedido", name = "total", dataType = "BigDecimal", example = "20.0")
     private BigDecimal total;
-    @ApiModelProperty(value = "Status do pedido", name = "orderStatus", dataType = "OrderStatus", example = "PENDING")
+    @ApiModelProperty(value = "Status do pedido", name = "orderStatus", dataType = "String", example = "PENDING")
     private OrderStatus orderStatus;
-    @ApiModelProperty(value = "Data do pedido", name = "orderedDate", dataType = "OffsetDateTime", example = "2022-07-28T11:00:03.831798-03:00")
-    private OffsetDateTime orderedDate;
-    @ApiModelProperty(value = "Data da finalização ou cancelamento", name = "endDate", dataType = "OffsetDateTime", example = "2022-07-28T11:00:03.831798-03:00")
-    private OffsetDateTime endDate;
+    @ApiModelProperty(value = "Data do pedido", name = "orderedDate", dataType = "LocalDateTime", example = "2022-07-28T11:00:03.831798-03:00")
+    private LocalDateTime orderedDate;
+    @ApiModelProperty(value = "Data da finalização ou cancelamento", name = "endDate", dataType = "LocalDateTime", example = "2022-07-28T11:00:03.831798-03:00")
+    private LocalDateTime endDate;
     @ApiModelProperty(value = "Lista de ocorrencias", name = "occurrenceResponseDtos", dataType = "List", example = "[{\"id\":1, \"orderId\":1, \"description\":\"Destinatario não estava na residência\", \"registerDate\":\"2022-07-28T11:00:03.831798-03:00\"}]")
     private List<OccurrenceResponseDto> occurrenceResponseDtos;
+    @ApiModelProperty(value = "Lista de pagamentos", name = "paymentResponseDtos", dataType = "List", example = "[{\"id\":1,\"amount\": 20.0, \"paymentType\": \"PIX\", \"expirationDate\": \"01-01-2023\", \"pixKey\": \"73982342213\", \"paymentDate\": \"01-01-2023\"}]")
+    private List<PaymentResponseDto> paymentResponseDtos;
 }

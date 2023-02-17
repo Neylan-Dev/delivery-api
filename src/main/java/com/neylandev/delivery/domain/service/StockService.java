@@ -15,7 +15,7 @@ import com.neylandev.delivery.domain.utils.ParseObjects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,7 +42,7 @@ public class StockService {
 
         stockMovementRepository.save(StockMovement.builder()
                 .stock(optionalStock.get())
-                .date(OffsetDateTime.now())
+                .date(LocalDateTime.now())
                 .type(StockMovementType.IN)
                 .build());
 
@@ -72,7 +72,7 @@ public class StockService {
 
         stockMovementRepository.save(StockMovement.builder()
                 .stock(optionalStock.get())
-                .date(OffsetDateTime.now())
+                .date(LocalDateTime.now())
                 .type(StockMovementType.OUT)
                 .build());
 

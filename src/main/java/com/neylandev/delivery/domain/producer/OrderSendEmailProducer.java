@@ -1,6 +1,6 @@
 package com.neylandev.delivery.domain.producer;
 
-import com.neylandev.delivery.domain.dto.DeliveryEmailDto;
+import com.neylandev.delivery.domain.dto.OrderEmailDto;
 import com.neylandev.delivery.domain.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.apache.camel.Produce;
@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class DeliverySendEmailProducer {
+public class OrderSendEmailProducer {
 
     @Produce(Constants.DIRECT_SEND_EMAIL)
     private final ProducerTemplate producerTemplate;
 
     @Async
-    public void send(DeliveryEmailDto deliveryEmailDto){
-        producerTemplate.sendBody(deliveryEmailDto);
+    public void send(OrderEmailDto orderEmailDto){
+        producerTemplate.sendBody(orderEmailDto);
     }
 }

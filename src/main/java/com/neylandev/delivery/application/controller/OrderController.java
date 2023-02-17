@@ -3,7 +3,7 @@ package com.neylandev.delivery.application.controller;
 import com.neylandev.delivery.application.request.OrderRequestDto;
 import com.neylandev.delivery.application.response.OrderResponseDto;
 import com.neylandev.delivery.domain.service.OrderCompletionService;
-import com.neylandev.delivery.domain.service.OrderCreationService;
+import com.neylandev.delivery.domain.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -22,7 +22,7 @@ import java.util.List;
 @Api(value = "/orders/", tags = "Endpoints responsáveis por gerenciar os dados de pedidos")
 public class OrderController {
 
-    private final OrderCreationService orderCreationService;
+    private final OrderService orderService;
     private final OrderCompletionService orderCompletionService;
 
     @ApiOperation(value = "Cadastra um novo pedido", response = OrderResponseDto.class)
@@ -36,7 +36,7 @@ public class OrderController {
     })
     @PostMapping
     public ResponseEntity<OrderResponseDto> create(@RequestBody @Valid OrderRequestDto orderRequestDto) {
-        return new ResponseEntity<>(orderCreationService.save(orderRequestDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(orderService.save(orderRequestDto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Retorna todos os pedidos cadastradas", response = OrderResponseDto.class, responseContainer = "List")
@@ -48,7 +48,7 @@ public class OrderController {
     })
     @GetMapping
     public ResponseEntity<List<OrderResponseDto>> listAll() {
-        return ResponseEntity.ok(orderCreationService.findAll());
+        return ResponseEntity.ok(orderService.findAll());
     }
 
     @ApiOperation(value = "Busca um pedido por id", response = OrderResponseDto.class)
@@ -62,7 +62,7 @@ public class OrderController {
     })
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> findById(@PathVariable Long orderId) {
-        return ResponseEntity.ok(orderCreationService.findById(orderId));
+        return ResponseEntity.ok(orderService.findById(orderId));
     }
 
     @ApiOperation(value = "Finaliza um pedido por id")
@@ -76,7 +76,7 @@ public class OrderController {
     })
     @PutMapping("/{orderId}/complete")
     public ResponseEntity<Void> complete(@PathVariable Long orderId) {
-        orderCompletionService.complete(orderId);
+//        orderCompletionService.complete(orderId);
         return ResponseEntity.noContent().build();
     }
 
@@ -91,7 +91,7 @@ public class OrderController {
     })
     @PutMapping("/{orderId}/cancel")
     public ResponseEntity<Void> cancel(@PathVariable Long orderId) {
-        orderCompletionService.cancel(orderId);
+//        orderCompletionService.cancel(orderId);
         return ResponseEntity.noContent().build();
     }
 

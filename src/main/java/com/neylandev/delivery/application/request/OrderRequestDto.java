@@ -40,4 +40,8 @@ public class OrderRequestDto {
     @NotEmpty(message = "A lista orderItemRequestDtos não pode ser vazia")
     @ApiModelProperty(value = "Lista de itens", name = "orderItemRequestDtos", dataType = "List", example = "[{\"productRequestDto\": {\"id\":1}, \"quantity\": 3}]")
     private List<OrderItemRequestDto> orderItemRequestDtos;
+    @NotNull(message = "O campo paymentRequestDtos não pode ser nulo")
+    @NotEmpty(message = "A lista paymentRequestDtos não pode ser vazia")
+    @ApiModelProperty(value = "Lista de pagamentos", name = "paymentRequestDtos", dataType = "List", example = "[{\"amount\": 20.0, \"paymentType\": \"PIX\", \"expirationDate\": \"01-01-2023\", \"pixKey\": \"73982342213\"}]")
+    private List<PaymentRequestDto> paymentRequestDtos;
 }
