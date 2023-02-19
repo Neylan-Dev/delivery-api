@@ -1,6 +1,7 @@
 package com.neylandev.delivery.application.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.neylandev.delivery.domain.enums.BrazilianState;
 import com.neylandev.delivery.domain.enums.OrderStatus;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -37,6 +38,14 @@ public class OrderResponseDto {
     private String recipientComplement;
     @ApiModelProperty(value = "Bairro do destinatário", name = "recipientNeighborhood", dataType = "String", example = "Centro")
     private String recipientNeighborhood;
+    @ApiModelProperty(value = "CEP do destinatário", name = "recipientZipCode", dataType = "String", example = "4520156")
+    private String recipientZipCode;
+    @ApiModelProperty(value = "Cidade do destinatário", name = "recipientCity", dataType = "String", example = "São Paulo")
+    private String recipientCity;
+    @ApiModelProperty(value = "Estado do destinatário", name = "recipientState", dataType = "String", example = "SP")
+    private BrazilianState recipientState;
+    @ApiModelProperty(value = "País do destinatário", name = "recipientCountry", dataType = "String", example = "Brasil")
+    private String recipientCountry;
     @ApiModelProperty(value = "Lista de itens", name = "orderItemResponseDtos", dataType = "List", example = "[{\"id\":1, \"productResponseDto\": {\"id\":1, \"name\":\"Caderno 20 Materias\", \"description\":\"Material escolar\", \"price\":20.0, \"category\":\"BOOKS\"}, \"quantity\":3, \"subtotal\":60.0}]")
     private List<OrderItemResponseDto> orderItemResponseDtos;
     @ApiModelProperty(value = "Soma de todos os subtotais do orderItemResponseDtos", name = "subtotal", dataType = "BigDecimal", example = "20.0")

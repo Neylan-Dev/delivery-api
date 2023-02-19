@@ -16,7 +16,7 @@ public class OrderSendEmailProducer {
     private final ProducerTemplate producerTemplate;
 
     @Async
-    public void send(OrderEmailDto orderEmailDto){
+    public void send(OrderEmailDto orderEmailDto) {
         producerTemplate.sendBody(orderEmailDto);
     }
 }

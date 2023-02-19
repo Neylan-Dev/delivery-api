@@ -34,11 +34,11 @@ public class StockService {
 
         Optional<Stock> optionalStock = getStockByProduct(product);
 
-        if (optionalStock.isEmpty()){
+        if (optionalStock.isEmpty()) {
             optionalStock = Optional.of(saveStock(product));
         }
 
-        optionalStock.get().setQuantity(optionalStock.get().getQuantity()+stockRequestDto.getQuantity());
+        optionalStock.get().setQuantity(optionalStock.get().getQuantity() + stockRequestDto.getQuantity());
 
         stockMovementRepository.save(StockMovement.builder()
                 .stock(optionalStock.get())
@@ -59,16 +59,16 @@ public class StockService {
 
         Optional<Stock> optionalStock = getStockByProduct(product);
 
-        if (optionalStock.isEmpty()){
+        if (optionalStock.isEmpty()) {
             throw DataForBusinessException.PRODUCT_NOT_FOUND_IN_STOCK
                     .asBusinessExceptionWithDescriptionFormatted(Long.toString(productId));
         }
 
-        if (optionalStock.get().getQuantity() < stockRequestDto.getQuantity()){
+        if (optionalStock.get().getQuantity() < stockRequestDto.getQuantity()) {
             throw DataForBusinessException.QUANTITY_PRODUCT_GREATER_THAN_QUANTITY_STOCK
                     .asBusinessExceptionWithDescriptionFormatted(Long.toString(productId));
         }
-        optionalStock.get().setQuantity(optionalStock.get().getQuantity()-stockRequestDto.getQuantity());
+        optionalStock.get().setQuantity(optionalStock.get().getQuantity() - stockRequestDto.getQuantity());
 
         stockMovementRepository.save(StockMovement.builder()
                 .stock(optionalStock.get())

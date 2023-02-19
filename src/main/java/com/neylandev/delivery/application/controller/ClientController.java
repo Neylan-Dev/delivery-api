@@ -1,6 +1,7 @@
 package com.neylandev.delivery.application.controller;
 
-import com.neylandev.delivery.application.request.ClientRequestDto;
+import com.neylandev.delivery.application.request.ClientCreateRequestDto;
+import com.neylandev.delivery.application.request.ClientUpdateRequestDto;
 import com.neylandev.delivery.application.response.ClientResponseDto;
 import com.neylandev.delivery.domain.service.ClientService;
 import io.swagger.annotations.Api;
@@ -59,8 +60,8 @@ public class ClientController {
             @ApiResponse(code = 500, message = "Sistema indisponível")
     })
     @PostMapping
-    public ResponseEntity<ClientResponseDto> create(@RequestBody @Valid ClientRequestDto clientRequestDto) {
-        return new ResponseEntity<>(clientService.create(clientRequestDto), HttpStatus.CREATED);
+    public ResponseEntity<ClientResponseDto> create(@RequestBody @Valid ClientCreateRequestDto clientCreateRequestDto) {
+        return new ResponseEntity<>(clientService.create(clientCreateRequestDto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados de um cliente por id", response = ClientResponseDto.class)
@@ -73,8 +74,8 @@ public class ClientController {
             @ApiResponse(code = 500, message = "Sistema indisponível")
     })
     @PutMapping("/{clientId}")
-    public ResponseEntity<ClientResponseDto> update(@PathVariable Long clientId, @RequestBody @Valid ClientRequestDto clientRequestDto) {
-        return ResponseEntity.ok().body(clientService.update(clientId, clientRequestDto));
+    public ResponseEntity<ClientResponseDto> update(@PathVariable Long clientId, @RequestBody @Valid ClientUpdateRequestDto clientUpdateRequestDto) {
+        return ResponseEntity.ok().body(clientService.update(clientId, clientUpdateRequestDto));
     }
 
     @ApiOperation(value = "Deleta dados de um cliente por id")

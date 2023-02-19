@@ -14,13 +14,13 @@ public class OrderSendEmailService {
 
     private final OrderSendEmailProducer orderSendEmailProducer;
 
-    public void sendEmail(Order order){
+    public void sendEmail(Order order) {
         OrderEmailDto orderEmailDto = null;
-        if (order.getOrderStatus().equals(OrderStatus.DELIVERED)){
+        if (order.getOrderStatus().equals(OrderStatus.DELIVERED)) {
             orderEmailDto = getOrderEmailDtoDelivered(order);
-        }else if (order.getOrderStatus().equals(OrderStatus.CANCELLED)){
+        } else if (order.getOrderStatus().equals(OrderStatus.CANCELLED)) {
             orderEmailDto = getOrderEmailDtoCanceled(order);
-        }else {
+        } else {
             throw DataForBusinessException.EMAIL_CANNOT_BE_SEND.asBusinessException();
         }
         orderSendEmailProducer.send(orderEmailDto);

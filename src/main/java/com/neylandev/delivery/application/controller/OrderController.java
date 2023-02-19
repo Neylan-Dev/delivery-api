@@ -1,8 +1,8 @@
 package com.neylandev.delivery.application.controller;
 
 import com.neylandev.delivery.application.request.OrderRequestDto;
+import com.neylandev.delivery.application.request.PaymentRequestDto;
 import com.neylandev.delivery.application.response.OrderResponseDto;
-import com.neylandev.delivery.domain.service.OrderCompletionService;
 import com.neylandev.delivery.domain.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +23,6 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final OrderCompletionService orderCompletionService;
 
     @ApiOperation(value = "Cadastra um novo pedido", response = OrderResponseDto.class)
     @ApiResponses(value = {
@@ -62,21 +61,21 @@ public class OrderController {
     })
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> findById(@PathVariable Long orderId) {
-        return ResponseEntity.ok(orderService.findById(orderId));
+        return ResponseEntity.ok(orderService.findOrderResponseDtoById(orderId));
     }
 
-    @ApiOperation(value = "Finaliza um pedido por id")
+    @ApiOperation(value = "Paga um pedido por id")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Pedido finalizado com sucesso"),
-            @ApiResponse(code = 400, message = "Má solicitação para finalizar pedido"),
+            @ApiResponse(code = 204, message = "Pedido pago com sucesso"),
+            @ApiResponse(code = 400, message = "Má solicitação para pagar pedido"),
             @ApiResponse(code = 401, message = "Ausência de autorização"),
-            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar finalização de pedido"),
+            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar pagamento de pedido"),
             @ApiResponse(code = 404, message = "Pedido não encontrado"),
             @ApiResponse(code = 500, message = "Sistema indisponível")
     })
-    @PutMapping("/{orderId}/complete")
-    public ResponseEntity<Void> complete(@PathVariable Long orderId) {
-//        orderCompletionService.complete(orderId);
+    @PostMapping("/{orderId}/pay")
+    public ResponseEntity<Void> pay(@PathVariable Long orderId, List<PaymentRequestDto> paymentRequestDtos) {
+        orderService.pay(orderId, paymentRequestDtos);
         return ResponseEntity.noContent().build();
     }
 
@@ -91,7 +90,37 @@ public class OrderController {
     })
     @PutMapping("/{orderId}/cancel")
     public ResponseEntity<Void> cancel(@PathVariable Long orderId) {
-//        orderCompletionService.cancel(orderId);
+        orderService.cancel(orderId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ApiOperation(value = "Sai com um pedido para entrega")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Pedido despachado com sucesso"),
+            @ApiResponse(code = 400, message = "Má solicitação para despachar pedido"),
+            @ApiResponse(code = 401, message = "Ausência de autorização"),
+            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar despachar pedido"),
+            @ApiResponse(code = 404, message = "Pedido não encontrado"),
+            @ApiResponse(code = 500, message = "Sistema indisponível")
+    })
+    @PutMapping("/{orderId}/dispatch")
+    public ResponseEntity<Void> dispatch(@PathVariable Long orderId) {
+        orderService.dispatch(orderId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ApiOperation(value = "Pedido entregue")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Pedido entregue com sucesso"),
+            @ApiResponse(code = 400, message = "Má solicitação para entregar pedido"),
+            @ApiResponse(code = 401, message = "Ausência de autorização"),
+            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar entrega de pedido"),
+            @ApiResponse(code = 404, message = "Pedido não encontrado"),
+            @ApiResponse(code = 500, message = "Sistema indisponível")
+    })
+    @PutMapping("/{orderId}/delivery")
+    public ResponseEntity<Void> delivery(@PathVariable Long orderId) {
+        orderService.delivery(orderId);
         return ResponseEntity.noContent().build();
     }
 

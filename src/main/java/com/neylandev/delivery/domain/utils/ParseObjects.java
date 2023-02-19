@@ -19,8 +19,12 @@ public class ParseObjects {
         return modelMapper.map(client, ClientResponseDto.class);
     }
 
-    public static Client clientRequestDtoToClient(ClientRequestDto clientRequestDto) {
-        return modelMapper.map(clientRequestDto, Client.class);
+    public static Client clientUpdateRequestDtoToClient(ClientUpdateRequestDto clientUpdateRequestDto) {
+        return modelMapper.map(clientUpdateRequestDto, Client.class);
+    }
+
+    public static Client clientCreateRequestDtoToClient(ClientCreateRequestDto clientCreateRequestDto) {
+        return modelMapper.map(clientCreateRequestDto, Client.class);
     }
 
     public static Product productRequestDtoToProduct(ProductRequestDto productRequestDto) {
@@ -86,7 +90,7 @@ public class ParseObjects {
     public static List<OrderResponseDto> listOrderToListOrderResponseDto(List<Order> orders) {
         return orders.stream().map(ParseObjects::orderToOrderResponseDto).collect(Collectors.toList());
     }
-    
+
     public static List<OrderItemResponseDto> listOrderItemToListOrderItemResponseDto(List<OrderItem> orderItems) {
         return orderItems.stream().map(ParseObjects::orderItemToOrderItemResponseDto).collect(Collectors.toList());
     }

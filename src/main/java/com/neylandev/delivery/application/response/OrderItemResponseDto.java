@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 public class OrderItemResponseDto {
 
 
-
     @ApiModelProperty(value = "Id do item do pedido", name = "id", dataType = "Long", example = "1")
     private Long id;
     @ApiModelProperty(value = "Dados de produto", name = "productResponseDto", dataType = "Object", example = "{\"id\":1, \"name\":\"Caderno 20 Materias\", \"description\":\"Material escolar\", \"price\":20.0, \"category\":\"BOOKS\"}")

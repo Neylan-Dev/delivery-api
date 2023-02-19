@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,13 +20,17 @@ public class OccurrenceService {
 
     @Transactional
     public OccurrenceResponseDto registerOccurrence(Long orderId, String description) {
-        var orderResponseDto = orderService.findById(orderId);
-//        var occurrence = delivery.addAndGetOccurrence(description);
-        return ParseObjects.occurrenceToOccurrenceResponseDto(occurrenceRepository.save(Occurrence.builder().build()));
+        var order = orderService.findById(orderId);
+        Occurrence occurrence = Occurrence.builder()
+                .description(description)
+                .order(order)
+                .registerDate(LocalDateTime.now())
+                .build();
+        return ParseObjects.occurrenceToOccurrenceResponseDto(occurrenceRepository.save(occurrence));
     }
 
-    public List<OccurrenceResponseDto> findAllOccurrencesOfDelivery(Long orderId) {
-        var orderResponseDto = orderService.findById(orderId);
+    public List<OccurrenceResponseDto> findAllOccurrencesOfOrder(Long orderId) {
+        var orderResponseDto = orderService.findOrderResponseDtoById(orderId);
         return orderResponseDto.getOccurrenceResponseDtos();
     }
 

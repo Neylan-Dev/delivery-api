@@ -33,8 +33,8 @@ public class OccurrenceController {
             @ApiResponse(code = 500, message = "Sistema indisponível")
     })
     @PostMapping
-    public ResponseEntity<OccurrenceResponseDto> registerOccurrence(@PathVariable Long deliveryId, @RequestBody @Valid OccurrenceRequestDto occurrenceRequestDto) {
-        return new ResponseEntity<>(occurrenceService.registerOccurrence(deliveryId, occurrenceRequestDto.getDescription()), HttpStatus.CREATED);
+    public ResponseEntity<OccurrenceResponseDto> registerOccurrence(@PathVariable Long orderId, @RequestBody @Valid OccurrenceRequestDto occurrenceRequestDto) {
+        return new ResponseEntity<>(occurrenceService.registerOccurrence(orderId, occurrenceRequestDto.getDescription()), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Retorna todas ocorrência de uma entrega por id", response = OccurrenceResponseDto.class, responseContainer = "List")
@@ -46,7 +46,7 @@ public class OccurrenceController {
     })
     @GetMapping
     public ResponseEntity<List<OccurrenceResponseDto>> listAll(@PathVariable Long deliveryId) {
-        return ResponseEntity.ok(occurrenceService.findAllOccurrencesOfDelivery(deliveryId));
+        return ResponseEntity.ok(occurrenceService.findAllOccurrencesOfOrder(deliveryId));
     }
 
 }

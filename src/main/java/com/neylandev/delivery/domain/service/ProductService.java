@@ -28,7 +28,7 @@ public class ProductService {
 
         Optional<Product> optionalProduct = productRepository.findByName(productRequestDto.getName());
 
-        if (optionalProduct.isPresent()){
+        if (optionalProduct.isPresent()) {
             throw DataForBusinessException.PRODUCT_EXISTS.asBusinessExceptionWithDescriptionFormatted(productRequestDto.getName());
         }
 
@@ -53,16 +53,16 @@ public class ProductService {
     }
 
     private void validate(ProductRequestDto productRequestDto) {
-        if (Objects.isNull(productRequestDto.getName())){
+        if (Objects.isNull(productRequestDto.getName())) {
             throw DataForBusinessException.PRODUCT_NAME_IS_NULL.asBusinessException();
         }
-        if (Objects.isNull(productRequestDto.getPrice())){
+        if (Objects.isNull(productRequestDto.getPrice())) {
             throw DataForBusinessException.PRODUCT_PRICE_IS_NULL.asBusinessException();
         }
-        if (Objects.isNull(productRequestDto.getCategory())){
+        if (Objects.isNull(productRequestDto.getCategory())) {
             throw DataForBusinessException.PRODUCT_CATEGORY_IS_NULL.asBusinessException();
         }
-        if (Objects.isNull(productRequestDto.getDescription())){
+        if (Objects.isNull(productRequestDto.getDescription())) {
             throw DataForBusinessException.PRODUCT_DESCRIPTION_IS_NULL.asBusinessException();
         }
     }

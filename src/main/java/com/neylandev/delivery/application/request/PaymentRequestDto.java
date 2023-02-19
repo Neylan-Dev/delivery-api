@@ -29,6 +29,7 @@ public class PaymentRequestDto {
     private String cardNumber;
     @ApiModelProperty(value = "Nome do dono do cartão", name = "cardName", dataType = "String", example = "João da Silva")
     private String cardName;
+    @NotNull
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @ApiModelProperty(value = "Data de expiração", name = "expirationDate", dataType = "LocalDate", example = "01-01-2023")
     private LocalDate expirationDate;

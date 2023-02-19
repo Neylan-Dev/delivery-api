@@ -32,7 +32,7 @@ public class StockController {
             @ApiResponse(code = 500, message = "Sistema indisponível")
     })
     @PostMapping("/in")
-    public ResponseEntity<StockResponseDto> addStock(@PathVariable Long productId,  @RequestBody @Valid StockRequestDto stockRequestDto) {
+    public ResponseEntity<StockResponseDto> addStock(@PathVariable Long productId, @RequestBody @Valid StockRequestDto stockRequestDto) {
         return new ResponseEntity<>(stockService.addStock(productId, stockRequestDto), HttpStatus.OK);
     }
 
@@ -46,7 +46,7 @@ public class StockController {
             @ApiResponse(code = 500, message = "Sistema indisponível")
     })
     @PostMapping("/out")
-    public ResponseEntity<StockResponseDto> removeStock(@PathVariable Long productId,  @RequestBody @Valid StockRequestDto stockRequestDto) {
+    public ResponseEntity<StockResponseDto> removeStock(@PathVariable Long productId, @RequestBody @Valid StockRequestDto stockRequestDto) {
         return new ResponseEntity<>(stockService.removeStock(productId, stockRequestDto), HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package com.neylandev.delivery.application.request;
 
+import com.neylandev.delivery.domain.enums.BrazilianState;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -33,6 +34,18 @@ public class OrderRequestDto {
     @NotBlank(message = "O campo recipientNeighborhood não pode ser nulo")
     @ApiModelProperty(value = "Bairro do destinatário", name = "recipientNeighborhood", dataType = "String", example = "Centro")
     private String recipientNeighborhood;
+    @NotBlank(message = "O campo recipientZipCode não pode ser nulo")
+    @ApiModelProperty(value = "CEP do destinatário", name = "recipientZipCode", dataType = "String", example = "4520156")
+    private String recipientZipCode;
+    @NotBlank(message = "O campo recipientCity não pode ser nulo")
+    @ApiModelProperty(value = "Cidade do destinatário", name = "recipientCity", dataType = "String", example = "São Paulo")
+    private String recipientCity;
+    @NotBlank(message = "O campo recipientState não pode ser nulo")
+    @ApiModelProperty(value = "Estado do destinatário", name = "recipientState", dataType = "String", example = "SP")
+    private BrazilianState recipientState;
+    @NotBlank(message = "O campo recipientCountry não pode ser nulo")
+    @ApiModelProperty(value = "País do destinatário", name = "recipientCountry", dataType = "String", example = "Brasil")
+    private String recipientCountry;
     @NotNull(message = "O campo shipping não pode ser nulo")
     @ApiModelProperty(value = "Taxa de envio", name = "shipping", dataType = "BigDecimal", example = "20.0")
     private BigDecimal shipping;
