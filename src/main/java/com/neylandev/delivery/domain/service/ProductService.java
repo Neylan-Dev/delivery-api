@@ -65,6 +65,9 @@ public class ProductService {
         if (Objects.isNull(productRequestDto.getDescription())) {
             throw DataForBusinessException.PRODUCT_DESCRIPTION_IS_NULL.asBusinessException();
         }
+        if (Objects.isNull(productRequestDto.getImageUrl())) {
+            throw DataForBusinessException.PRODUCT_IMAGE_URL_IS_NULL.asBusinessException();
+        }
     }
 
     public List<ProductResponseDto> findProductsThatStockGreaterThanZero() {

@@ -25,4 +25,6 @@ public class ProductResponseDto {
     private BigDecimal price;
     @ApiModelProperty(value = "Categoria do produto", name = "category", dataType = "Category", example = "BOOKS")
     private Category category;
+    @ApiModelProperty(value = "Url da imagem do produto", name = "imageUrl", dataType = "String", example = "https://cdn.pixabay.com/photo/2017/12/28/10/41/book-3044875_960_720.jpg")
+    private String imageUrl;
 }
