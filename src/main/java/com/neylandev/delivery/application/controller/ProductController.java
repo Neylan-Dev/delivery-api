@@ -2,6 +2,7 @@ package com.neylandev.delivery.application.controller;
 
 import com.neylandev.delivery.application.request.ProductRequestDto;
 import com.neylandev.delivery.application.response.ProductResponseDto;
+import com.neylandev.delivery.domain.enums.Category;
 import com.neylandev.delivery.domain.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -73,5 +74,17 @@ public class ProductController {
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponseDto> findById(@PathVariable Long productId) {
         return ResponseEntity.ok(productService.findById(productId));
+    }
+
+    @ApiOperation(value = "Retorna todas as categorias de produtos", response = Category.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retornando lista de categorias"),
+            @ApiResponse(code = 401, message = "Ausência de autorização"),
+            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar busca de categorias"),
+            @ApiResponse(code = 500, message = "Sistema indisponível")
+    })
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> listAllCategories() {
+        return ResponseEntity.ok(List.of(Category.values()));
     }
 }
