@@ -84,7 +84,7 @@ public class ProductController {
             @ApiResponse(code = 500, message = "Sistema indisponível")
     })
     @GetMapping("/categories")
-    public ResponseEntity<List<Category>> listAllCategories() {
-        return ResponseEntity.ok(List.of(Category.values()));
+    public ResponseEntity<List<String>> listAllCategories() {
+        return ResponseEntity.ok(Category.getPortugueseCategories());
     }
 }
