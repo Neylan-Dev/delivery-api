@@ -3,7 +3,7 @@ package com.neylandev.delivery.application.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.neylandev.delivery.domain.enums.AccountType;
 import com.neylandev.delivery.domain.enums.BrazilianState;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Getter
@@ -14,37 +14,36 @@ import lombok.*;
 @AllArgsConstructor
 public class ClientResponseDto {
 
-    @ApiModelProperty(value = "Id do cliente", name = "id", dataType = "Long", example = "1")
+    @Schema(description = "Id do cliente", example = "1")
     private Long id;
-    @ApiModelProperty(value = "Nome do cliente", name = "name", dataType = "String", example = "Antônio dos Santos")
+    @Schema(description = "Nome do cliente", example = "Antônio dos Santos")
     private String name;
-    @ApiModelProperty(value = "Email do cliente", name = "email", dataType = "String", example = "antonio@email.com")
+    @Schema(description = "Email do cliente", example = "antonio@email.com")
     private String email;
-    @ApiModelProperty(value = "Telefone do cliente", name = "telephone", dataType = "String", example = "73981234356")
+    @Schema(description = "Telefone do cliente", example = "73981234356")
     private String telephone;
-    @ApiModelProperty(value = "Rua do cliente", name = "addressStreet", dataType = "String", example = "Rua do Meio")
+    @Schema(description = "Rua do cliente", example = "Rua do Meio")
     private String addressStreet;
-    @ApiModelProperty(value = "Numero do endereço do cliente", name = "addressNumber", dataType = "String", example = "10")
+    @Schema(description = "Numero do endereço do cliente", example = "10")
     private String addressNumber;
-    @ApiModelProperty(value = "Complemento do endereço do cliente", name = "addressComplement", dataType = "String", example = "Apto")
+    @Schema(description = "Complemento do endereço do cliente", example = "Apto")
     private String addressComplement;
-    @ApiModelProperty(value = "Bairro do cliente", name = "addressNeighborhood", dataType = "String", example = "Centro")
+    @Schema(description = "Bairro do cliente", example = "Centro")
     private String addressNeighborhood;
-    @ApiModelProperty(value = "CEP do cliente", name = "addressZipCode", dataType = "String", example = "4520156")
+    @Schema(description = "CEP do cliente", example = "4520156")
     private String addressZipCode;
-    @ApiModelProperty(value = "Cidade do cliente", name = "addressCity", dataType = "String", example = "São Paulo")
+    @Schema(description = "Cidade do cliente", example = "São Paulo")
     private String addressCity;
-    @ApiModelProperty(value = "Estado do cliente", name = "addressState", dataType = "String", example = "SP")
+    @Schema(description = "Estado do cliente", example = "SP")
     private BrazilianState addressState;
-    @ApiModelProperty(value = "País do cliente", name = "addressCountry", dataType = "String", example = "Brasil")
+    @Schema(description = "País do cliente", example = "Brasil")
     private String addressCountry;
-    @ApiModelProperty(value = "Agencia da conta do cliente", name = "accountAgency", dataType = "String", example = "001")
+    @Schema(description = "Agencia da conta do cliente", example = "001")
     private String accountAgency;
-    @ApiModelProperty(value = "Numero da conta do cliente", name = "accountNumber", dataType = "String", example = "2343543546")
+    @Schema(description = "Numero da conta do cliente", example = "2343543546")
     private String accountNumber;
-    @ApiModelProperty(value = "Digito da conta do cliente", name = "accountDigit", dataType = "String", example = "1")
+    @Schema(description = "Digito da conta do cliente", example = "1")
     private String accountDigit;
-    @ApiModelProperty(value = "Tipo da conta do cliente", name = "accountType", dataType = "String", example = "CURRENT")
+    @Schema(description = "Tipo da conta do cliente", example = "CURRENT")
     private AccountType accountType;
-
 }

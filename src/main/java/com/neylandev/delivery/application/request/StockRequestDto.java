@@ -1,10 +1,9 @@
 package com.neylandev.delivery.application.request;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -14,6 +13,6 @@ import javax.validation.constraints.Positive;
 public class StockRequestDto {
     @NotNull(message = "O campo quantity não pode ser nulo")
     @Positive(message = "O valor no campo quantity deve ser positivo")
-    @ApiModelProperty(value = "Quantidade do produto", name = "quantity", dataType = "int", example = "3")
+    @Schema(description = "Quantidade do produto", example = "3")
     private int quantity;
 }

@@ -1,9 +1,8 @@
 package com.neylandev.delivery.application.request;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -13,6 +12,6 @@ import javax.validation.constraints.NotBlank;
 public class OccurrenceRequestDto {
 
     @NotBlank
-    @ApiModelProperty(value = "Descrição", name = "description", dataType = "String", example = "Destinatário não estava em casa")
+    @Schema(description = "Descrição", example = "Destinatário não estava em casa")
     private String description;
 }

@@ -4,88 +4,86 @@ import com.neylandev.delivery.application.request.ClientCreateRequestDto;
 import com.neylandev.delivery.application.request.ClientUpdateRequestDto;
 import com.neylandev.delivery.application.response.ClientResponseDto;
 import com.neylandev.delivery.domain.service.ClientService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/clients")
 @RequiredArgsConstructor
-@Api(value = "/clients/", tags = "Endpoints responsáveis por gerenciar os dados de Clientes")
 public class ClientController {
 
     private final ClientService clientService;
 
-    @ApiOperation(value = "Retorna todos clientes cadastrados", response = ClientResponseDto.class, responseContainer = "List")
+    @Operation(summary = "Retorna todos clientes cadastrados")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Retornando lista de clientes"),
-            @ApiResponse(code = 401, message = "Ausência de autorização"),
-            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar busca de clientes"),
-            @ApiResponse(code = 500, message = "Sistema indisponível")
+            @ApiResponse(responseCode = "200", description = "Retornando lista de clientes"),
+            @ApiResponse(responseCode = "401", description = "Ausência de autorização"),
+            @ApiResponse(responseCode = "403", description = "Usuário não autorizado a realizar busca de clientes"),
+            @ApiResponse(responseCode = "500", description = "Sistema indisponível")
     })
     @GetMapping
     public ResponseEntity<List<ClientResponseDto>> listAll() {
         return ResponseEntity.ok(clientService.findAll());
     }
 
-    @ApiOperation(value = "Busca um cliente por id", response = ClientResponseDto.class)
+    @Operation(summary = "Busca um cliente por id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Cliente encontrado"),
-            @ApiResponse(code = 400, message = "Má solicitação para buscar os dados do cliente"),
-            @ApiResponse(code = 401, message = "Ausência de autorização"),
-            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar busca de cliente por id"),
-            @ApiResponse(code = 404, message = "Cliente não encontrado"),
-            @ApiResponse(code = 500, message = "Sistema indisponível")
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
+            @ApiResponse(responseCode = "400", description = "Má solicitação para buscar os dados do cliente"),
+            @ApiResponse(responseCode = "401", description = "Ausência de autorização"),
+            @ApiResponse(responseCode = "403", description = "Usuário não autorizado a realizar busca de cliente por id"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Sistema indisponível")
     })
     @GetMapping("/{clientId}")
     public ResponseEntity<ClientResponseDto> findById(@PathVariable Long clientId) {
         return ResponseEntity.ok(clientService.findById(clientId));
     }
 
-    @ApiOperation(value = "Cadastra um novo cliente", response = ClientResponseDto.class)
+    @Operation(summary = "Cadastra um novo cliente")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Cliente cadastrado com sucesso"),
-            @ApiResponse(code = 400, message = "Má solicitação para cadastrar os dados de cliente"),
-            @ApiResponse(code = 401, message = "Ausência de autorização"),
-            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar cadastro de cliente"),
-            @ApiResponse(code = 409, message = "Conflito com dados que já estão cadastrado"),
-            @ApiResponse(code = 500, message = "Sistema indisponível")
+            @ApiResponse(responseCode = "201", description = "Cliente cadastrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Má solicitação para cadastrar os dados de cliente"),
+            @ApiResponse(responseCode = "401", description = "Ausência de autorização"),
+            @ApiResponse(responseCode = "403", description = "Usuário não autorizado a realizar cadastro de cliente"),
+            @ApiResponse(responseCode = "409", description = "Conflito com dados que já estão cadastrado"),
+            @ApiResponse(responseCode = "500", description = "Sistema indisponível")
     })
     @PostMapping
     public ResponseEntity<ClientResponseDto> create(@RequestBody @Valid ClientCreateRequestDto clientCreateRequestDto) {
         return new ResponseEntity<>(clientService.create(clientCreateRequestDto), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Atualiza dados de um cliente por id", response = ClientResponseDto.class)
+    @Operation(summary = "Atualiza dados de um cliente por id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Cliente atualizado com sucesso"),
-            @ApiResponse(code = 400, message = "Má solicitação para atualizar os dados de cliente"),
-            @ApiResponse(code = 401, message = "Ausência de autorização"),
-            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar atualização de cliente"),
-            @ApiResponse(code = 404, message = "Cliente não encontrado"),
-            @ApiResponse(code = 500, message = "Sistema indisponível")
+            @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Má solicitação para atualizar os dados de cliente"),
+            @ApiResponse(responseCode = "401", description = "Ausência de autorização"),
+            @ApiResponse(responseCode = "403", description = "Usuário não autorizado a realizar atualização de cliente"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Sistema indisponível")
     })
     @PutMapping("/{clientId}")
     public ResponseEntity<ClientResponseDto> update(@PathVariable Long clientId, @RequestBody @Valid ClientUpdateRequestDto clientUpdateRequestDto) {
         return ResponseEntity.ok().body(clientService.update(clientId, clientUpdateRequestDto));
     }
 
-    @ApiOperation(value = "Deleta dados de um cliente por id")
+    @Operation(summary = "Deleta dados de um cliente por id")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Cliente excluído com sucesso"),
-            @ApiResponse(code = 400, message = "Má solicitação para excluir os dados de cliente"),
-            @ApiResponse(code = 401, message = "Ausência de autorização"),
-            @ApiResponse(code = 403, message = "Usuário não autorizado a realizar exclusão de cliente"),
-            @ApiResponse(code = 404, message = "Cliente não encontrado"),
-            @ApiResponse(code = 500, message = "Sistema indisponível")
+            @ApiResponse(responseCode = "204", description = "Cliente excluído com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Má solicitação para excluir os dados de cliente"),
+            @ApiResponse(responseCode = "401", description = "Ausência de autorização"),
+            @ApiResponse(responseCode = "403", description = "Usuário não autorizado a realizar exclusão de cliente"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Sistema indisponível")
     })
     @DeleteMapping("/{clientId}")
     public ResponseEntity<Void> delete(@PathVariable Long clientId) {

@@ -1,12 +1,12 @@
 package com.neylandev.delivery.application.request;
 
 import com.neylandev.delivery.domain.enums.BrazilianState;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -18,43 +18,43 @@ import java.util.List;
 public class OrderRequestDto {
 
     @NotNull(message = "O campo clientId não pode ser nulo")
-    @ApiModelProperty(value = "Id do cliente", name = "clientId", dataType = "Long", example = "1")
+    @Schema(description = "Id do cliente", example = "1")
     private Long clientId;
     @NotBlank(message = "O campo recipientName não pode ser nulo")
-    @ApiModelProperty(value = "Nome do destinatário", name = "recipientName", dataType = "String", example = "José da Silva")
+    @Schema(description = "Nome do destinatário", example = "José da Silva")
     private String recipientName;
     @NotBlank(message = "O campo recipientStreet não pode ser nulo")
-    @ApiModelProperty(value = "Rua do destinatário", name = "recipientStreet", dataType = "String", example = "Rua do Meio")
+    @Schema(description = "Rua do destinatário", example = "Rua do Meio")
     private String recipientStreet;
     @NotBlank(message = "O campo recipientNumber não pode ser nulo")
-    @ApiModelProperty(value = "Numero do endereço do destinatário", name = "recipientNumber", dataType = "String", example = "10")
+    @Schema(description = "Numero do endereço do destinatário", example = "10")
     private String recipientNumber;
-    @ApiModelProperty(value = "Complemento do endereço do destinatário", name = "recipientComplement", dataType = "String", example = "Apto")
+    @Schema(description = "Complemento do endereço do destinatário", example = "Apto")
     private String recipientComplement;
     @NotBlank(message = "O campo recipientNeighborhood não pode ser nulo")
-    @ApiModelProperty(value = "Bairro do destinatário", name = "recipientNeighborhood", dataType = "String", example = "Centro")
+    @Schema(description = "Bairro do destinatário", example = "Centro")
     private String recipientNeighborhood;
     @NotBlank(message = "O campo recipientZipCode não pode ser nulo")
-    @ApiModelProperty(value = "CEP do destinatário", name = "recipientZipCode", dataType = "String", example = "4520156")
+    @Schema(description = "CEP do destinatário", example = "4520156")
     private String recipientZipCode;
     @NotBlank(message = "O campo recipientCity não pode ser nulo")
-    @ApiModelProperty(value = "Cidade do destinatário", name = "recipientCity", dataType = "String", example = "São Paulo")
+    @Schema(description = "Cidade do destinatário", example = "São Paulo")
     private String recipientCity;
     @NotBlank(message = "O campo recipientState não pode ser nulo")
-    @ApiModelProperty(value = "Estado do destinatário", name = "recipientState", dataType = "String", example = "SP")
+    @Schema(description = "Estado do destinatário", example = "SP")
     private BrazilianState recipientState;
     @NotBlank(message = "O campo recipientCountry não pode ser nulo")
-    @ApiModelProperty(value = "País do destinatário", name = "recipientCountry", dataType = "String", example = "Brasil")
+    @Schema(description = "País do destinatário", example = "Brasil")
     private String recipientCountry;
     @NotNull(message = "O campo shipping não pode ser nulo")
-    @ApiModelProperty(value = "Taxa de envio", name = "shipping", dataType = "BigDecimal", example = "20.0")
+    @Schema(description = "Taxa de envio", example = "20.0")
     private BigDecimal shipping;
     @NotNull(message = "O campo orderItemRequestDtos não pode ser nulo")
     @NotEmpty(message = "A lista orderItemRequestDtos não pode ser vazia")
-    @ApiModelProperty(value = "Lista de itens", name = "orderItemRequestDtos", dataType = "List", example = "[{\"productRequestDto\": {\"id\":1}, \"quantity\": 3}]")
+    @Schema(description = "Lista de itens", example = "[{\"productRequestDto\": {\"id\":1}, \"quantity\": 3}]")
     private List<OrderItemRequestDto> orderItemRequestDtos;
     @NotNull(message = "O campo paymentRequestDtos não pode ser nulo")
     @NotEmpty(message = "A lista paymentRequestDtos não pode ser vazia")
-    @ApiModelProperty(value = "Lista de pagamentos", name = "paymentRequestDtos", dataType = "List", example = "[{\"amount\": 20.0, \"paymentType\": \"PIX\", \"expirationDate\": \"01-01-2023\", \"pixKey\": \"73982342213\"}]")
+    @Schema(description = "Lista de pagamentos", example = "[{\"amount\": 20.0, \"paymentType\": \"PIX\", \"expirationDate\": \"01-01-2023\", \"pixKey\": \"73982342213\"}]")
     private List<PaymentRequestDto> paymentRequestDtos;
 }

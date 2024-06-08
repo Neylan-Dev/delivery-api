@@ -1,7 +1,7 @@
 package com.neylandev.delivery.application.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class OccurrenceResponseDto {
 
-    @ApiModelProperty(value = "Id da ocorrência", name = "id", dataType = "Long", example = "1")
+    @Schema(description = "Id da ocorrência", example = "1")
     private Long id;
-    @ApiModelProperty(value = "Descrição", name = "description", dataType = "String", example = "Destinatário não estava em casa")
+    @Schema(description = "Descrição", example = "Destinatário não estava em casa")
     private String description;
-    @ApiModelProperty(value = "Id do produto", name = "id", dataType = "Long", example = "1")
+    @Schema(description = "Id do produto", example = "1")
     private Long orderId;
-    @ApiModelProperty(value = "Data do ocorrência", name = "registerDate", dataType = "LocalDateTime", example = "2022-07-28T11:00:03.831798-03:00")
+    @Schema(description = "Data do ocorrência", example = "2022-07-28T11:00:03.831798-03:00")
     private LocalDateTime registerDate;
 }

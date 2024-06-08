@@ -2,7 +2,7 @@ package com.neylandev.delivery.application.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.neylandev.delivery.domain.enums.Category;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -15,16 +15,16 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ProductResponseDto {
 
-    @ApiModelProperty(value = "Id do produto", name = "id", dataType = "Long", example = "1")
+    @Schema(description = "Id do produto", example = "1")
     private Long id;
-    @ApiModelProperty(value = "Nome do produto", name = "name", dataType = "String", example = "Caderno 20 Materias")
+    @Schema(description = "Nome do produto", example = "Caderno 20 Materias")
     private String name;
-    @ApiModelProperty(value = "Descrição do produto", name = "description", dataType = "String", example = "Material escolar")
+    @Schema(description = "Descrição do produto", example = "Material escolar")
     private String description;
-    @ApiModelProperty(value = "Preço do produto", name = "price", dataType = "BigDecimal", example = "20.0")
+    @Schema(description = "Preço do produto", example = "20.0")
     private BigDecimal price;
-    @ApiModelProperty(value = "Categoria do produto", name = "category", dataType = "Category", example = "BOOKS")
+    @Schema(description = "Categoria do produto", example = "BOOKS")
     private Category category;
-    @ApiModelProperty(value = "Url da imagem do produto", name = "imageUrl", dataType = "String", example = "https://cdn.pixabay.com/photo/2017/12/28/10/41/book-3044875_960_720.jpg")
+    @Schema(description = "Url da imagem do produto", example = "https://cdn.pixabay.com/photo/2017/12/28/10/41/book-3044875_960_720.jpg")
     private String imageUrl;
 }
